@@ -1,2 +1,22 @@
-# potential-pancake
-Projeto final da materia de programacao web
+# Potential Pancakes - Backend
+
+Este é o repositório da parte backend do projeto **Potential Pancakes**. Aqui, estamos usando Node.js com Express para construir a lógica do servidor.
+
+## Visão Geral
+
+O projeto **Potential Pancakes** é uma plataforma [descreva brevemente o propósito do projeto]. A parte backend é responsável por gerenciar os dados, autenticação, e outras funcionalidades essenciais do sistema.
+
+## Tecnologias Utilizadas
+
+- Node.js
+- Express.js
+- [Liste outras tecnologias ou bibliotecas relevantes]
+
+## Como Iniciar
+
+Para iniciar o servidor backend em sua máquina, siga estas etapas:
+
+1. Clone este repositório:
+
+   ```bash
+   git clone https://github.com/seu-usuario/potential-pancakes-backend.git
