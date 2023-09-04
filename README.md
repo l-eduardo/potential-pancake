@@ -1,6 +1,7 @@
+**WiP**
 # Potential Pancakes - Backend
 
-Este é o repositório da parte backend do projeto **Potential Pancakes**. Aqui, estamos usando Node.js com Express para construir a lógica do servidor.
+Este é o repositório da parte backend do projeto **Potential Pancakes**. O projeto esta em fase inicial de construcao
 
 ## Visão Geral
 
