@@ -1,0 +1,15 @@
+{
+  "name": "potential-pancake",
+  "version": "1.0.0",
+  "description": "**WiP** # Potential Pancakes - Backend",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
