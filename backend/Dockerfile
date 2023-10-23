@@ -6,10 +6,6 @@ WORKDIR /app
 
 RUN groupadd app && useradd app -g app 
 
-# Define as variáveis de ambiente
-# ENV PYTHONDONTWRITEBYTECODE 1
-# ENV PYTHONUNBUFFERED 1
-
 # Instala as dependências do PostgreSQL
 RUN apt-get update \
   && apt-get install -y gcc \
