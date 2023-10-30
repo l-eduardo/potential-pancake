@@ -1,0 +1,31 @@
+services:
+  web:
+    container_name: backend_potential_pancake
+    image: potential_pancake_backend/seniores
+    command: python manage.py runserver 0.0.0.0:8000
+    build: .
+    tty: true
+    volumes:
+      - .:/app
+    ports:
+      - 8000:8000
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_started
+
+  db:
+    image: postgres:16
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=${SQL_USER}
+      - POSTGRES_PASSWORD=${SQL_PASSWORD}
+      - POSTGRES_DB=${SQL_DATABASE}
+      - PGPORT=${SQL_PORT}
+    restart: "on-failure"
+
+volumes:
+  postgres_data:
