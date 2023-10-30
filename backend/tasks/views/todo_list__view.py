@@ -1,8 +1,6 @@
 from rest_framework import viewsets
-import sys
-sys.path.append('../..')
-from tasks.models import TodoList
-from tasks.serializers import TodoListSerializer
+from ..models import TodoList
+from ..serializers import TodoListSerializer
 
 
 class TodoListView(viewsets.ModelViewSet):
