@@ -14,6 +14,9 @@ services:
     depends_on:
       db:
         condition: service_started
+    networks:
+      backend-db:
+        ipv4_address: 10.5.0.3      
 
   db:
     image: postgres:16
@@ -26,6 +29,17 @@ services:
       - POSTGRES_DB=${SQL_DATABASE}
       - PGPORT=${SQL_PORT}
     restart: "on-failure"
+    ports:
+      - 5432:5432
+    networks:
+      backend-db:
+        ipv4_address: 10.5.0.2
 
-volumes:
-  postgres_data:
+networks:
+  backend-db:
+    name: backend-db
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.5.0.0/16
+          gateway: 10.5.0.1

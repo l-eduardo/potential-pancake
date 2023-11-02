@@ -1,8 +1,8 @@
-BE := ./backend
-FE := ./frontend
+BE := backend
+FE := frontend
 default: 
 	@echo "Comandos disponíveis"
-	@echo "make build-be           - Cria containers caso não os tenha, ou caso modifique .env.dev"
+	@echo "make build-be           - Cria containers caso não os tenha, ou caso modifique .env"
 	@echo "make makemigrations-be  - Cria migrations"
 	@echo "make migrate-be         - Executa migrations"
 	@echo "make createsuperuser-be - Criar um usuario"
@@ -11,11 +11,7 @@ default:
 
 ### BACKEND ###
 build-be:
-ifeq ("$(wildcard ${BE}/.env.dev)","") 
-	cp ${BE}/.env.dev-example .env.dev
-	@echo "#####____________________________________________________________________Novo arquivo .env.dev criado" 
-endif
-	docker-compose -f ${BE}/docker-compose-dev.yaml --env-file=${BE}/.env.dev up -d --build
+	docker-compose -f ${BE}/docker-compose.yaml --env-file=${BE}/.env up -d --build
 
 makemigrations-be:
 	docker exec -ti backend_potential_pancake python manage.py makemigrations
@@ -24,25 +20,32 @@ migrate-be:
 	docker exec -ti backend_potential_pancake python manage.py migrate
 
 createsuperuser-be:
-	docker exec -ti backend_potential_pancake python manage.py createsuperuserbackend 
+	docker exec -ti backend_potential_pancake python manage.py createsuperuser
 
 start-be:
-	docker-compose -f docker-compose-dev.yaml start
-	docker exec -ti backend_potential_pancake python manage.py runserver backend 0.0.0.0:8000
+	docker-compose -f ${BE}/docker-compose.yaml start
+	docker exec -ti backend_potential_pancake python manage.py runserver 0.0.0.0:8000
 
 stop-be:
-	docker-compose -f ${BE}/docker-compose-dev.yaml stop
+	docker-compose -f ${BE}/docker-compose.yaml stop
+
+down-be:
+	docker-compose -f ${BE}/docker-compose.yaml down
+
 
 ### FRONTEND ###
 build-fe:
-	docker-compose -f ${FE}/docker-compose-dev.yaml up -d --build
+	docker-compose -f ${FE}/docker-compose.yaml up -d --build
 
 start-fe:
-	docker-compose -f ${FE}/docker-compose-dev.yaml start
+	docker-compose -f ${FE}/docker-compose.yaml start
 	docker exec -ti frontend_potential_pancake npm run dev
 
 stop-fe:
-	docker-compose -f ${FE}/docker-compose-dev.yaml down
+	docker-compose -f ${FE}/docker-compose.yaml down
+
+down-fe:
+	docker-compose -f ${FE}/docker-compose.yaml down
 
 ## GENERAL ##
 
@@ -50,7 +53,19 @@ build:
 	${MAKE} build-fe && ${MAKE} build-be
 
 start:
-	${MAKE} start-fe && ${MAKE} start-be
+	docker-compose -f ${FE}/docker-compose.yaml start
+	docker exec -d frontend_potential_pancake npm run dev
+	docker-compose -f ${BE}/docker-compose.yaml start
+	docker exec -d backend_potential_pancake python manage.py runserver 0.0.0.0:8000
 
-start:
+run:
+	${MAKE} build
+	${MAKE} makemigrations-be
+	${MAKE} migrate-be
+	${MAKE} start
+
+stop:
 	${MAKE} stop-fe && ${MAKE} stop-be
+
+down:
+	${MAKE} down-fe && ${MAKE} down-be

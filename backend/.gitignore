@@ -61,3 +61,7 @@ target/
 
 # JetBrains
 .idea
+
+#Docker volumes trash
+postgres_data
+init.sql
