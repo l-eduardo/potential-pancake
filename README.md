@@ -1,80 +1,59 @@
-# Instruções para Executar a Aplicação Django e React
+**WiP**
+# Potential Pancakes - Backend
 
-Este README fornece instruções para executar sua aplicação que utiliza Django como backend e React como frontend. O processo de execução é simplificado usando um Makefile.
+Este é o repositório da parte backend do projeto **Potential Pancakes**. O projeto esta em fase inicial de construcao
 
-## Pré-requisitos
+## Visão Geral
 
-Antes de começar, certifique-se de ter as seguintes ferramentas e dependências instaladas em seu sistema:
+O projeto **Potential Pancakes** é uma plataforma [descreva brevemente o propósito do projeto]. A parte backend é responsável por gerenciar os dados, autenticação, e outras funcionalidades essenciais do sistema.
 
-- [Docker](https://www.docker.com/get-started)
-- [Docker Compose](https://docs.docker.com/compose/install/)
+## Tecnologias Utilizadas
+
+- Python 3.10
+- Django Rest Framework
+- Docker
+- Docker-Compose
 - Make
 
-## Configuração
+## Como Iniciar
 
-1. Clone o repositório da aplicação para o seu computador.
+Para iniciar o servidor backend em sua máquina, siga estas etapas:
 
-2. Navegue até o diretório raiz da aplicação.
+1. Clone este repositório:
 
-3. Renomeie o arquivo `.env.example` em `backend` para `.env` e configure as variáveis de ambiente necessárias para a configuração do Django.
+   ```bash
+   $ git clone https://github.com/seu-usuario/potential-pancakes-backend.git
 
+2. Garanta que o Make, Docker e o Docker-compose estejam instalados.
+   ```bash
+   $ docker --version
+   $ docker-compose --version
+   $ make --version
 
-## Rodar a aplicação
-
-```bash
-make run
-```
-
-## Comandos backend
-
-- Builda imagem e cria container
+3. Execute os seguintes comandos:
+- Cria containers 
 ```bash
 make build-be
 ```
-
-- Cria e executa as migrations
+- Cria migrations
 ```bash
-make makemigrations-be
-make migrate-be
+make makemigrations  
 ```
-
-- Cria um usuário de administração
+- Executa migrations
 ```bash
-make createsuperuser-be  # (Opcional: criar um superusuário)
+make migrate
 ```
-
-- Para o container
+- Criar um usuario
 ```bash
-make stop-be
+make createsuperuser
 ```
-
-- Para e deleta o container
+- Inicializa container, e executa serviço Django
 ```bash
-make down-be
+make start
 ```
-## Comandos Frontend
-### Para criar e executar o servidor de desenvolvimento
-
-- Builda imagem e cria container
+- Encerra execução dos containers BD e Django
 ```bash
-make build-fe
+make stop
 ```
-
-- Starta o container
-```bash
-make start-fe
-```
-
-- Para o container
-```bash
-make stop-fe
-```
-
-- Deleta o container
-```bash
-make down-fe
-```
-
-# Recomendações p/ rodar no Windows
-- Instale o [WSL]https://learn.microsoft.com/pt-br/windows/wsl/install
-- Siga os passos descritos anteriormente.
+##Como rodar no windows 
+ https://ubuntu.com/download/desktop
