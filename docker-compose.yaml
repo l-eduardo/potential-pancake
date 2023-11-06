@@ -2,7 +2,7 @@ services:
   web:
     container_name: backend_potential_pancake
     image: potential_pancake_backend/seniores
-    command: python manage.py runserver 0.0.0.0:8000
+    # command: python manage.py runserver 0.0.0.0:8000
     build: .
     tty: true
     volumes:
@@ -13,7 +13,7 @@ services:
       - .env
     depends_on:
       db:
-        condition: service_started
+        condition: service_healthy
     networks:
       backend-db:
         ipv4_address: 10.5.0.3      
@@ -29,6 +29,11 @@ services:
       - POSTGRES_DB=${SQL_DATABASE}
       - PGPORT=${SQL_PORT}
     restart: "on-failure"
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
     ports:
       - 5432:5432
     networks:
