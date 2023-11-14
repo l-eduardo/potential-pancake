@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render
 
 from tasks.form import TaskForm
-from tasks.models.task import Task
+from tasks.models import Task
 
 def list_tasks(request):
     tasks = Task.objects.all()

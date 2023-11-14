@@ -1,5 +1,6 @@
 from django.db import models
-from .card import Card
+
+from cards.models import Card
 
 
 class Task(models.Model):
