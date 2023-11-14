@@ -14,10 +14,10 @@ django.setup()
 
 if __name__ == '__main__':
     import faker
-    from tasks.models import TodoList, Task
+    from tasks.models import Card, Task
     from django.contrib.auth.models import User
 
-    TodoList.objects.all().delete()
+    Card.objects.all().delete()
     Task.objects.all().delete()
 
     fake = faker.Faker('pt_BR')
@@ -30,7 +30,7 @@ if __name__ == '__main__':
     todo_lists_description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris non condimentum lectus. '\
                              'Vivamus id commodo turpis. Duis commodo a urna non posuere.'
 
-    django_todo_lists = [TodoList(title=title, description=todo_lists_description, owner=owner) for title in todo_lists]
+    django_todo_lists = [Card(title=title, description=todo_lists_description, owner=owner) for title in todo_lists]
 
     for todo_list in django_todo_lists:
         todo_list.save()
