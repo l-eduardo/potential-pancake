@@ -42,8 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
-    'rest_framework',
     'tasks',
+    'cards',
 ]
 
 MIDDLEWARE = [
@@ -62,7 +62,7 @@ ROOT_URLCONF = 'potentialpancake.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'tasks/templates'],
+        'DIRS': [os.path.join(BASE_DIR,'tasks/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

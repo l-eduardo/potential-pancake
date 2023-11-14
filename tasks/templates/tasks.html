@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <title>Lista de Tarefas</title>
+</head>
+<body>
+    <h1>Lista de Tarefas</h1>
+    <ul>
+        {% for task in tasks %}
+            <li>{{ task.title }}</li>
+            <li>{{ task.description }}</li>
+            <li>{{ task.completed }}<a></a></li>
+            <li>{{ task.id }}</li>
+            <li><a href="{% url 'delete_task' pk=task.id%}">Excluir</a> <a href="{% url 'complete_task' pk=task.id%}">Completar</a></li>
+            <br/>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'create_task' %}">Criar tarefa</a>
+</body>
+</html>
