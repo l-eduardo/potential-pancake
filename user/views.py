@@ -29,7 +29,7 @@ def user_login(request): # nome antigo era 'login', ver depois se não vai impli
         
         if user is not None:
             login(request, user)
-            return redirect('tasks')
+            return redirect('tasks:list_tasks')
         
         else:
             messages.info(request, 'Usuário OU senha estão incorretos')
