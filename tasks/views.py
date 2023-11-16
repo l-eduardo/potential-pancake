@@ -12,7 +12,7 @@ def create_task(request):
         form = TaskForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('list_tasks')
+            return redirect('tasks:list_tasks')
     elif request.method == "GET":
         form = TaskForm()
         return render(request, 'create_task.html', {'form': form})
@@ -20,10 +20,10 @@ def create_task(request):
 def delete_task(request, pk):
     task = Task.objects.get(pk=pk)
     task.delete()
-    return redirect('list_tasks')
+    return redirect('tasks:list_tasks')
 
 def complete_task(request, pk):
     task = Task.objects.get(pk=pk)
     task.completed = task.completed == False
     task.save()
-    return redirect('list_tasks')
+    return redirect('tasks:list_tasks')
