@@ -3,8 +3,6 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
 
-from .models import Order
-
         
 class CreateUserForm(UserCreationForm):
     class Meta:
