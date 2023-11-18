@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <title>Criar Card</title>
+</head>
+<body>
+    <h1>Criar Card</h1>
+    <form method="post" action="{% url 'cards:create_card' %}"> {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Salvar</button>
+    </form>
+    <a href="{% url 'cards:list_cards' %}">Voltar para a lista de cards</a>
+</body>
+</html>
