@@ -9,8 +9,8 @@
         <li>{{ task.description }}</li>
         <li>{{ task.completed }}</li>
         <li>{{ task.id }}</li>
-        <li><a href="{% url 'tasks:update_task' pk=task.id%}">Atualizar</a> <a href="{% url 'tasks:delete_task' pk=task.id%}">Excluir</a></li>
+        <li><a href="{% url 'tasks:update' pk=task.id%}">Atualizar</a> <a href="{% url 'tasks:delete' pk=task.id%}">Excluir</a></li>
     </ul>
-    <a href="{% url 'tasks:list_tasks' %}">Voltar para a lista de tasks</a>
+    <a href="{% url 'tasks:list_all' %}">Voltar para a lista de tasks</a>
 </body>
 </html>

@@ -7,14 +7,14 @@
     <h1>Lista de Cards</h1>
     <ul>
         {% for card in cards %}
-            <li><a href="{% url 'cards:find_card_by_id' pk=card.id%}">{{ card.title }}</a></li>
+            <li><a href="{% url 'cards:find_by_id' pk=card.id%}">{{ card.title }}</a></li>
             <li>{{ card.description }}</li>
             <li>{{ card.owner }}</li>
             <li>{{ card.id }}</li>
-            <li><a href="{% url 'cards:update_card' pk=card.id%}">Atualizar</a> <a href="{% url 'cards:delete_card' pk=card.id%}">Excluir</a></li>
+            <li><a href="{% url 'cards:update' pk=card.id%}">Atualizar</a> <a href="{% url 'cards:delete' pk=card.id%}">Excluir</a></li>
             <br/><br/>
         {% endfor %}
     </ul>
-    <a href="{% url 'cards:create_card' %}">Criar card</a>
+    <a href="{% url 'cards:create' %}">Criar card</a>
 </body>
 </html>

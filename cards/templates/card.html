@@ -9,8 +9,8 @@
         <li>{{ card.description }}</li>
         <li>{{ card.owner }}</li>
         <li>{{ card.id }}</li>
-        <li><a href="{% url 'cards:update_card' pk=card.id%}">Atualizar</a> <a href="{% url 'cards:delete_card' pk=card.id%}">Excluir</a></li>
+        <li><a href="{% url 'cards:update' pk=card.id%}">Atualizar</a> <a href="{% url 'cards:delete' pk=card.id%}">Excluir</a></li>
     </ul>
-    <a href="{% url 'cards:list_cards' %}">Voltar para a lista de cards</a>
+    <a href="{% url 'cards:list_all' %}">Voltar para a lista de cards</a>
 </body>
 </html>

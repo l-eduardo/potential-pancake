@@ -5,10 +5,10 @@
 </head>
 <body>
     <h1>Criar Tarefa</h1>
-    <form method="post" action="{% url 'tasks:create_task' %}"> {% csrf_token %}
+    <form method="post" action="{% url 'tasks:create' %}"> {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Salvar</button>
     </form>
-    <a href="{% url 'tasks:list_tasks' %}">Voltar para a lista de tarefas</a>
+    <a href="{% url 'tasks:list_all' %}">Voltar para a lista de tarefas</a>
 </body>
 </html>
