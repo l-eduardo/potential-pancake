@@ -7,11 +7,12 @@
     <h1>Lista de Tarefas</h1>
     <ul>
         {% for task in tasks %}
-            <li>{{ task.title }}</li>
+            <li><a href="{% url 'tasks:find_task_by_id' pk=task.id%}">{{ task.title }}</a></li>
             <li>{{ task.description }}</li>
-            <li>{{ task.completed }}<a></a></li>
+            <li>{{ task.completed }}</li>
+            <li>{{ task.card }}</li>
             <li>{{ task.id }}</li>
-            <li><a href="{% url 'tasks:delete_task' pk=task.id%}">Excluir</a> <a href="{% url 'tasks:complete_task' pk=task.id%}">Completar</a></li>
+            <li><a href="{% url 'tasks:update_task' pk=task.id%}">Atualizar</a> <a href="{% url 'tasks:complete_task' pk=task.id%}">Completar</a> <a href="{% url 'tasks:delete_task' pk=task.id%}">Excluir</a></li>
             <br/>
         {% endfor %}
     </ul>
