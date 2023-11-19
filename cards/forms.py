@@ -1,8 +1,8 @@
 from django import forms
-from .models import Task
+from .models import Card
 
 
-class CardsForm(forms.ModelForm):
+class CardForm(forms.ModelForm):
     class Meta:
-        model = Task
+        model = Card
         fields = ('id', 'title', 'description', 'owner')
