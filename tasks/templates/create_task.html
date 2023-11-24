@@ -2,13 +2,85 @@
 <html lang="pt">
 <head>
     <title>Criar Tarefa</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e6e6e6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        form {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 300px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4a90e2;
+            color: #fff;
+            padding: 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #357abd;
+        }
+
+        a {
+            display: block;
+            margin-top: 10px;
+            text-align: center;
+            color: #333;
+        }
+    </style>
 </head>
 <body>
-    <h1>Criar Tarefa</h1>
-    <form method="post" action="{% url 'tasks:create' %}"> {% csrf_token %}
-        {{ form.as_p }}
+    <form method="post" action="{% url 'tasks:create' %}">
+        {% csrf_token %}
+        <h1>Criar Tarefa</h1>
+
+        <label for="title">Título:</label>
+        {{ form.title }}
+
+        <label for="description">Descrição:</label>
+        {{ form.description }}
+
+        <label class="card_button" for="card">Card:</label>
+        {{ form.card }}
         <button type="submit">Salvar</button>
+        <a href="{% url 'tasks:list_all' %}">Voltar</a>
     </form>
-    <a href="{% url 'tasks:list_all' %}">Voltar para a lista de tarefas</a>
 </body>
 </html>
