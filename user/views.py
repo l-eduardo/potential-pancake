@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from .forms import CreateUserForm
@@ -38,3 +39,18 @@ def user_login(request):  # nome antigo era 'login', ver depois se não vai impl
 
     context = {}
     return render(request, 'login.html', context)
+
+@login_required
+def user_edit(request):
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST, instance = request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Informações do usuário atualizadas com sucesso!')
+            return redirect('tasks')
+        
+    else:
+        form = CreateUserForm(instance=request.user)
+    
+    context = {'form':form}
+    return render(request, 'user_edit.html', context)
