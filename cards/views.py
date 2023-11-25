@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render, get_object_or_404, get_list_or_404
 
-from cards.forms import CardForm
+from cards.forms import CardForm, SharedCardForm
 from cards.models import Card
 
 
@@ -43,3 +43,14 @@ def update(request, pk):
 def find_by_id(request, pk):
     card = get_object_or_404(Card, pk=pk)
     return render(request, 'card.html', {'card': card})
+
+
+def share(request):
+    if request.method == "POST":
+        form = SharedCardForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('cards:list_all')
+    elif request.method == "GET":
+        form = SharedCardForm()
+        return render(request, 'share_card.html', {'form': form})
