@@ -14,7 +14,7 @@ def register(request):
         if form.is_valid():
             form.save()
             user = form.cleaned_data.get('username')
-            messages.success(request, 'Conta criada com sucesso! ' + user)
+            messages.success(request, 'Account created successfully!' + user)
 
             return redirect('login')
 
@@ -22,7 +22,7 @@ def register(request):
     return render(request, 'register.html', context)
 
 
-def user_login(request):  # nome antigo era 'login', ver depois se não vai implicar em outras partes do sistema
+def user_login(request):
 
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -35,7 +35,7 @@ def user_login(request):  # nome antigo era 'login', ver depois se não vai impl
             return redirect('tasks:list_all')
 
         else:
-            messages.info(request, 'Usuário OU senha estão incorretos')
+            messages.info(request, 'Username OR password is incorrect')
 
     context = {}
     return render(request, 'login.html', context)
@@ -46,7 +46,7 @@ def user_edit(request):
         form = CreateUserForm(request.POST, instance = request.user)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Informações do usuário atualizadas com sucesso!')
+            messages.success(request, 'User information updated successfully!')
             return redirect('tasks')
         
     else:
