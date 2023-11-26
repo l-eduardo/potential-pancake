@@ -24,7 +24,5 @@ COPY . /app
 
 EXPOSE 8000:8000
 
-RUN python manage.py makemigration \
+RUN python manage.py makemigrations \
   python manage.py migrate
-
-CMD ["s", "python manage.py migrate"]
