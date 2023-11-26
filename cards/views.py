@@ -4,12 +4,19 @@ from django.contrib.auth.decorators import login_required
 
 from cards.forms import CardForm, SharedCardForm
 from cards.models import Card, SharedCard
+from tasks.models import Task
 
 
 @login_required
 def list_all(request):
+    cards_tasks = {}
     cards = get_cards_for_user(request.user)
-    return render(request, 'cards.html', {'cards': cards})
+
+    for card in cards:
+        tasks = Task.objects.filter(card=card)[:4]
+        cards_tasks[card] = tasks
+
+    return render(request, 'cards.html', {'cards_tasks': cards_tasks})
 
 
 @login_required
@@ -34,6 +41,7 @@ def delete(request, pk):
     return HttpResponseForbidden("Você não tem permissão para remover este card.")
 
 
+@login_required
 def share(request):
     if request.method == "POST":
         card_id = request.POST.get('card')
@@ -81,13 +89,19 @@ def get_cards_for_user(user):
 
     return cards
 
+
 @login_required
 def find_by_id(request, pk):
     card = get_object_or_404(Card, pk=pk)
+    tasks = get_list_or_404(Task, card=card)
     if card.user_has_permission(request.user, "view_card"):
-        return render(request, 'card.html', {'card': card})
+        return render(request, 'card.html', {
+            'card': card,
+            'tasks': tasks
+        })
 
     return HttpResponseForbidden("Você não tem permissão para acessar este card.")
+
 
 @login_required
 def share(request):

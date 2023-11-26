@@ -6,12 +6,14 @@
 <body>
     <h1>Lista de Cards</h1>
     <ul>
-        {% for card in cards %}
+        {% for card, tasks in cards_tasks.items %}
             <li><a href="{% url 'cards:find_by_id' pk=card.id%}">{{ card.title }}</a></li>
-            <li>{{ card.description }}</li>
-            <li>{{ card.owner }}</li>
-            <li>{{ card.id }}</li>
-            <li><a href="{% url 'cards:update' pk=card.id%}">Atualizar</a> <a href="{% url 'cards:delete' pk=card.id%}">Excluir</a></li>
+                <ol>
+                    {% for task in tasks %}
+                        <li>{{ task.description }}</li>
+                    {% endfor %}
+                </ol>
+            <a href="{% url 'cards:update' pk=card.id%}">Atualizar</a> <a href="{% url 'cards:delete' pk=card.id%}">Excluir</a>
             <br/><br/>
         {% endfor %}
     </ul>
