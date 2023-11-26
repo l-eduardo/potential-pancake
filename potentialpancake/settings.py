@@ -83,7 +83,7 @@ WSGI_APPLICATION = 'potentialpancake.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 CSRF_TRUSTED_ORIGINS = [
-    "potential-pancake-production.up.railway.app",
+    "https://potential-pancake-production.up.railway.app",
 ]
 
 DATABASES = {
