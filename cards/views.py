@@ -1,15 +1,18 @@
-from django.shortcuts import redirect, render, get_object_or_404
+from django.shortcuts import redirect, render, get_object_or_404, get_list_or_404
 from django.http import HttpResponseForbidden
+from django.contrib.auth.decorators import login_required
 
 from cards.forms import CardForm, SharedCardForm
 from cards.models import Card, SharedCard
 
 
+@login_required
 def list_all(request):
     cards = get_cards_for_user(request.user)
     return render(request, 'cards.html', {'cards': cards})
 
 
+@login_required
 def create(request):
     if request.method == "POST":
         form = CardForm(request.POST)
@@ -21,6 +24,7 @@ def create(request):
         return render(request, 'create_card.html', {'form': form})
 
 
+@login_required
 def delete(request, pk):
     card = get_object_or_404(Card, pk=pk)
     if card.user_has_permission(request.user, "delete_card"):
@@ -50,6 +54,7 @@ def share(request):
         return render(request, 'share_card.html', {'form': form})
 
 
+@login_required
 def update(request, pk):
     card = get_object_or_404(Card, pk=pk)
 
@@ -76,10 +81,21 @@ def get_cards_for_user(user):
 
     return cards
 
-
+@login_required
 def find_by_id(request, pk):
     card = get_object_or_404(Card, pk=pk)
     if card.user_has_permission(request.user, "view_card"):
         return render(request, 'card.html', {'card': card})
 
     return HttpResponseForbidden("Você não tem permissão para acessar este card.")
+
+@login_required
+def share(request):
+    if request.method == "POST":
+        form = SharedCardForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('cards:list_all')
+    elif request.method == "GET":
+        form = SharedCardForm()
+        return render(request, 'share_card.html', {'form': form})
