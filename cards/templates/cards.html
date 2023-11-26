@@ -2,6 +2,89 @@
 <html lang="pt">
 <head>
     <title>Lista de Cards</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e6e6e6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        h1 {
+            text-align: center;
+            color: black;
+            margin-top: 20px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-gap: 20px;
+            padding: 20px;
+            justify-content: center;
+        }
+
+        li {
+            background-color: #f0f0f0;
+            padding: 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        li:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .action-links {
+            margin-top: 10px;
+        }
+
+        .action-links a {
+            margin-right: 10px;
+            color: #4a90e2;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #4a90e2;
+            color: #fff;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            display: inline-block;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border: 2px solid black;
+        }
+
+        button:hover {
+            background-color: #357abd;
+        }
+
+        br {
+            display: block;
+            margin: 10px 0;
+        }
+    </style>
 </head>
 <body>
     <h1>Lista de Cards</h1>
@@ -17,6 +100,8 @@
             <br/><br/>
         {% endfor %}
     </ul>
-    <a href="{% url 'cards:create' %}">Criar card</a>
+    <div class="button-container">
+        <button onclick="location.href='{% url 'cards:create' %}'">Criar Card</button>
+    </div>
 </body>
 </html>
