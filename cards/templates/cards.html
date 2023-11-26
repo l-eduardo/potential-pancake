@@ -47,7 +47,7 @@
         }
 
         a:hover {
-            text-decoration: underline;
+            text-decoration: none;
         }
 
         .action-links {
@@ -80,23 +80,42 @@
             background-color: #357abd;
         }
 
+        ol {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0;
+        }
+
+        ol li {
+            padding: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+
         br {
             display: block;
             margin: 10px 0;
         }
+        
     </style>
 </head>
 <body>
     <h1>Lista de Cards</h1>
     <ul>
         {% for card, tasks in cards_tasks.items %}
-            <li><a href="{% url 'cards:find_by_id' pk=card.id%}">{{ card.title }}</a></li>
+            <li>
+                <a href="{% url 'cards:find_by_id' pk=card.id%}">{{ card.title }} - {{ card.owner }}</a>
                 <ol>
                     {% for task in tasks %}
-                        <li>{{ task.description }}</li>
+                        <a href="{% url 'tasks:complete' pk=task.id%}"><li> {{ task.description }} <input type='checkbox'>{{ task.completed}}</input> </li></a>
                     {% endfor %}
                 </ol>
-            <a href="{% url 'cards:update' pk=card.id%}">Atualizar</a> <a href="{% url 'cards:delete' pk=card.id%}">Excluir</a>
+                <div class="action-links">
+                    <a href="{% url 'cards:update' pk=card.id%}">Atualizar</a>
+                    <a href="{% url 'cards:delete' pk=card.id%}">Excluir</a>
+                </div>
+            </li>
             <br/><br/>
         {% endfor %}
     </ul>
@@ -105,3 +124,7 @@
     </div>
 </body>
 </html>
+
+<script> 
+
+</script> 
