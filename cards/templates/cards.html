@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-    <title>Lista de Cards</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <title>Card List</title>
     <style>
         body {
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #e6e6e6;
+            background-color: #373737;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
@@ -14,33 +15,67 @@
 
         h1 {
             text-align: center;
-            color: black;
-            margin-top: 20px;
+            color: #D9D9D9;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        button {
+            opacity: 0.7;
+            background-color: #4a90e2;
+            color: #fff;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            display: inline-block;
+            cursor: pointer;
+            transition: 0.5s;
+            border: 2px solid black;
+            font-weight: bold;
+        }
+        button:hover {
+            opacity: 1;
         }
 
         ul {
             list-style: none;
             padding: 0;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            grid-gap: 20px;
-            padding: 20px;
-            justify-content: center;
+            display: flex; /* Alteração para exibição em linha */
+            flex-wrap: wrap; /* Permite que os itens quebrem para a próxima linha */
+            margin: 0px; /* Remove a margem lateral causada pela quebra de linha */
         }
 
         li {
-            background-color: #f0f0f0;
-            padding: 20px;
+            background-color: #D9D9D9;
+            padding: 20px 20px 40px 20px;
             border-radius: 5px;
             cursor: pointer;
             transition: transform 0.3s, box-shadow 0.3s;
+            margin: 10px; /* Adiciona margem entre os cards */
+            flex: 0 0 calc(33% - 20px); /* Define a largura dos cards e ajusta a margem */
+            box-sizing: border-box; /* Garante que a largura inclua a margem */
+            position: relative;
         }
+
 
         li:hover {
             transform: translateY(-5px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
+
+        @media only screen and (max-width: 600px) {
+            li {
+              flex: 0 0 calc(80% - 20px); /* Define a largura dos cards e ajusta a margem */
+            }
+
+            ul {
+                justify-content: center;
+            }
+        }
         a {
             text-decoration: none;
             color: #333;
@@ -55,29 +90,19 @@
         }
 
         .action-links a {
-            margin-right: 10px;
+            margin-right: 5px;
             color: #4a90e2;
-        }
+            bottom: 0;
+            bottom: 0;
+            left: 0;
 
-        .button-container {
-            text-align: center;
-            margin-bottom: 20px;
         }
-
-        button {
-            background-color: #4a90e2;
-            color: #fff;
-            padding: 15px;
-            border: none;
-            border-radius: 5px;
-            display: inline-block;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            border: 2px solid black;
-        }
-
-        button:hover {
-            background-color: #357abd;
+        .botoes{
+            color: #4a90e2;
+            bottom: 0;
+            position: absolute;
+            left: 15;
+            padding: 10px;
         }
 
         ol {
@@ -97,24 +122,58 @@
             display: block;
             margin: 10px 0;
         }
-        
+        li.completed {
+            text-decoration: line-through;
+            color: #666; /* Adjust color for completed tasks */
+        }
+        .material-symbols-outlined {
+        font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 3
+        }
+        .container-taks{
+            display: flex;
+            justify-content: space-around;
+        }
+
     </style>
 </head>
 <body>
-    <h1>Lista de Cards</h1>
+    <h1>Cards</h1>
     <ul>
         {% for card, tasks in cards_tasks.items %}
             <li>
-                <a href="{% url 'cards:find_by_id' pk=card.id%}">{{ card.title }} - {{ card.owner }}</a>
+                <a href="{% url 'cards:find_by_id' pk=card.id%}"><strong>{{ card.title }}</strong> - {{ card.owner }}</a>
                 <ol>
                     {% for task in tasks %}
-                        <a href="{% url 'tasks:complete' pk=task.id%}"><li> {{ task.description }} <input type='checkbox'>{{ task.completed}}</input> </li></a>
+                        <a href="{% url 'tasks:complete' pk=task.id%}">
+                            <li {% if task.completed %}class="completed"{% endif %}>
+                                <div class='container-task'>
+                                        <input type='checkbox' {% if task.completed %}checked{% endif %} disabled>
+                                        {{ task.description }}
+                                    <a href="{% url 'tasks:delete' pk=task.id%}" class="material-symbols-outlined">
+                                        close
+                                    </a>
+                                </div>
+                            </li>
+                        </a>
                     {% endfor %}
+                    <div class="action-links">
+                        <div class='botoes'>
+                            <a href="{% url 'cards:update' pk=card.id%}" class="material-symbols-outlined">
+                                edit
+                            </a>
+                            <a href="{% url 'cards:delete' pk=card.id%}" class="material-symbols-outlined">
+                                delete
+                            </a>
+                            <a href="{% url 'tasks:create' %}" class="material-symbols-outlined">
+                                add
+                            </a>
+                        </div>
+                    </div>
                 </ol>
-                <div class="action-links">
-                    <a href="{% url 'cards:update' pk=card.id%}">Atualizar</a>
-                    <a href="{% url 'cards:delete' pk=card.id%}">Excluir</a>
-                </div>
             </li>
             <br/><br/>
         {% endfor %}
@@ -124,7 +183,3 @@
     </div>
 </body>
 </html>
-
-<script> 
-
-</script> 
