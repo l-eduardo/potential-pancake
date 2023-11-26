@@ -7,7 +7,7 @@ from cards.models import Card, SharedCard
 from tasks.models import Task
 
 
-@login_required
+@login_required(login_url="user:login")
 def list_all(request):
     cards_tasks = {}
     cards = get_cards_for_user(request.user)
@@ -19,7 +19,7 @@ def list_all(request):
     return render(request, 'cards.html', {'cards_tasks': cards_tasks})
 
 
-@login_required
+@login_required(login_url="user:login")
 def create(request):
     if request.method == "POST":
         form = CardForm(request.POST)
@@ -31,7 +31,7 @@ def create(request):
         return render(request, 'create_card.html', {'form': form})
 
 
-@login_required
+@login_required(login_url="user:login")
 def delete(request, pk):
     card = get_object_or_404(Card, pk=pk)
     if card.user_has_permission(request.user, "delete_card"):
@@ -41,7 +41,7 @@ def delete(request, pk):
     return HttpResponseForbidden("Você não tem permissão para remover este card.")
 
 
-@login_required
+@login_required(login_url="user:login")
 def share(request):
     if request.method == "POST":
         card_id = request.POST.get('card')
@@ -62,7 +62,7 @@ def share(request):
         return render(request, 'share_card.html', {'form': form})
 
 
-@login_required
+@login_required(login_url="user:login")
 def update(request, pk):
     card = get_object_or_404(Card, pk=pk)
 
@@ -90,7 +90,7 @@ def get_cards_for_user(user):
     return cards
 
 
-@login_required
+@login_required(login_url="user:login")
 def find_by_id(request, pk):
     card = get_object_or_404(Card, pk=pk)
     tasks = get_list_or_404(Task, card=card)
@@ -103,7 +103,7 @@ def find_by_id(request, pk):
     return HttpResponseForbidden("Você não tem permissão para acessar este card.")
 
 
-@login_required
+@login_required(login_url="user:login")
 def share(request):
     if request.method == "POST":
         form = SharedCardForm(request.POST)

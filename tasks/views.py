@@ -8,14 +8,14 @@ from cards.models import Card
 from cards.views import get_cards_for_user
 
 
-@login_required
+@login_required(login_url="user:login")
 def list_all(request):
     cards = get_cards_for_user(request.user)
     tasks = Task.objects.filter(card__in=cards)
     return render(request, 'tasks.html', {'tasks': tasks})
 
 
-@login_required
+@login_required(login_url="user:login")
 def create(request):
     if request.method == "POST":
         form = TaskForm(request.POST)
@@ -29,7 +29,7 @@ def create(request):
         return render(request, 'create_task.html', {'form': form})
 
 
-@login_required
+@login_required(login_url="user:login")
 def delete(request, pk):
     task = get_object_or_404(Task, pk=pk)
 
@@ -40,7 +40,7 @@ def delete(request, pk):
     return HttpResponseForbidden("Você não tem permissão para remover esta tarefa.")
 
 
-@login_required
+@login_required(login_url="user:login")
 def update(request, pk):
     task = get_object_or_404(Task, pk=pk)
 
@@ -57,7 +57,7 @@ def update(request, pk):
     return render(request, 'update_task.html', {'form': form})
 
 
-@login_required
+@login_required(login_url="user:login")
 def find_by_id(request, pk):
     task = get_object_or_404(Task, pk=pk)
 
@@ -67,7 +67,7 @@ def find_by_id(request, pk):
     return HttpResponseForbidden("Você não tem permissão para acessar esta tarefa.")
 
 
-@login_required
+@login_required(login_url="user:login")
 def complete(request, pk):
     task = get_object_or_404(Task, pk=pk)
 

@@ -44,7 +44,7 @@ def user_login(request):
     context = {}
     return render(request, 'login.html', context)
 
-@login_required
+@login_required(login_url="user:login")
 def user_edit(request):
     if request.method == 'POST':
         form = CreateUserForm(request.POST, instance = request.user)
