@@ -75,6 +75,10 @@
         .action-links a {
             margin-right: 10px;
         }
+
+        p{
+            overflow: hidden;
+        }
     </style>
 </head>
 <body>
@@ -85,9 +89,6 @@
     <ul>
         {% for task in tasks %}
             <li>
-                <a href="{% url 'tasks:find_by_id' pk=task.id%}">
-                    <strong>{{ task.title }}</strong>
-                </a>
                 <p class="description">Descrição: {{ task.description }} </p>
                 <p class="finalizada">Finalizada: {{ task.completed }} </p>
                 <p class="card">Card: {{ task.card }} </p>
