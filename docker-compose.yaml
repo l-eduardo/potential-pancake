@@ -2,7 +2,12 @@ services:
   web:
     container_name: backend_potential_pancake
     image: potential_pancake_backend/seniores
-    # command: python manage.py runserver 0.0.0.0:8000
+  ## Verificar funcionalidade
+#    command: sh -c "
+#      python manage.py makemigrations
+#      && python manage.py migrate
+#      && python utils/create_groups.py
+#      && python manage.py runserver 0.0.0.0:8000"
     build: .
     tty: true
     volumes:
