@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.mail import send_mail
@@ -25,7 +25,20 @@ def register(request):
     context = {'form': form}
     return render(request, 'register.html', context)
 
-
+@login_required
+def user_edit(request):
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'User information updated successfully!')
+            return redirect('tasks')
+        
+    else:
+        form = CreateUserForm(instance=request.user)
+    
+    context = {'form':form}
+    return render(request, 'user_edit.html', context)
 
 def user_login(request):
     if request.method == 'POST':
@@ -43,21 +56,6 @@ def user_login(request):
 
     context = {}
     return render(request, 'login.html', context)
-
-@login_required
-def user_edit(request):
-    if request.method == 'POST':
-        form = CreateUserForm(request.POST, instance = request.user)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'User information updated successfully!')
-            return redirect('tasks')
-        
-    else:
-        form = CreateUserForm(instance=request.user)
-    
-    context = {'form':form}
-    return render(request, 'user_edit.html', context)
   
 def reset_password(request):
     if request.method == "POST":
@@ -87,3 +85,7 @@ def generate_new_password(email):
         [email],
         fail_silently=False,
     )
+
+def logout(request):
+    logout(request)
+    return redirect('login')
