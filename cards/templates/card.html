@@ -5,12 +5,14 @@
 </head>
 <body>
     <h1>Card {{ card.title }}</h1>
-    <ul>
-        <li>{{ card.description }}</li>
-        <li>{{ card.owner }}</li>
-        <li>{{ card.id }}</li>
-        <li><a href="{% url 'cards:update' pk=card.id%}">Atualizar</a> <a href="{% url 'cards:delete' pk=card.id%}">Excluir</a></li>
-    </ul>
+    {% for task in tasks %}
+        <ul>
+            <li>{{ task.description }}</li>
+            <li>{{ task.completed }}</li>
+        </ul>
+    {% endfor %}
+    <a href="{% url 'cards:update' pk=card.id%}">Atualizar Card</a> <a href="{% url 'cards:delete' pk=card.id%}">Excluir</a>
+
     <a href="{% url 'cards:list_all' %}">Voltar para a lista de cards</a>
 </body>
 </html>
