@@ -89,14 +89,14 @@
 <body>
     <h1>Lista de Cards</h1>
     <ul>
-        {% for card in cards %}
-            <li>
-                <p><a href="{% url 'cards:find_by_id' pk=card.id%}"> <strong>{{ card.title }}</strong></a> - Owner: {{ card.owner }}</p>
-                <div class="action-links">
-                    <a href="{% url 'cards:update' pk=card.id%}">Atualizar</a>
-                    <a href="{% url 'cards:delete' pk=card.id%}">Excluir</a>
-                </div>
-            </li>
+        {% for card, tasks in cards_tasks.items %}
+            <li><a href="{% url 'cards:find_by_id' pk=card.id%}">{{ card.title }}</a></li>
+                <ol>
+                    {% for task in tasks %}
+                        <li>{{ task.description }}</li>
+                    {% endfor %}
+                </ol>
+            <a href="{% url 'cards:update' pk=card.id%}">Atualizar</a> <a href="{% url 'cards:delete' pk=card.id%}">Excluir</a>
             <br/><br/>
         {% endfor %}
     </ul>
