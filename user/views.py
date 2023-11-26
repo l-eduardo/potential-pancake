@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
@@ -17,7 +18,7 @@ def register(request):
         if form.is_valid():
             form.save()
             user = form.cleaned_data.get('username')
-            messages.success(request, 'Conta criada com sucesso! ' + user)
+            messages.success(request, 'Account created successfully!' + user)
 
             return redirect('login')
 
@@ -25,7 +26,8 @@ def register(request):
     return render(request, 'register.html', context)
 
 
-def user_login(request):  # nome antigo era 'login', ver depois se não vai implicar em outras partes do sistema
+
+def user_login(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -37,12 +39,26 @@ def user_login(request):  # nome antigo era 'login', ver depois se não vai impl
             return redirect('tasks:list_all')
 
         else:
-            messages.info(request, 'Usuário OU senha estão incorretos')
+            messages.info(request, 'Username OR password is incorrect')
 
     context = {}
     return render(request, 'login.html', context)
 
-
+@login_required
+def user_edit(request):
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST, instance = request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'User information updated successfully!')
+            return redirect('tasks')
+        
+    else:
+        form = CreateUserForm(instance=request.user)
+    
+    context = {'form':form}
+    return render(request, 'user_edit.html', context)
+  
 def reset_password(request):
     if request.method == "POST":
         form = EmailOnlyPasswordResetForm(request.POST)

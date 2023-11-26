@@ -4,7 +4,7 @@ from user.views import register, user_login, reset_password
 app_name = 'user'
 
 urlpatterns = [
-    path('register/', register, name='register'),
-    path('login/', user_login, name='login'),
-    path('reset-password/', reset_password, name='reset_password'),
+    path('register/', views.register, name ='register'),
+    path('login/', views.user_login, name ='login'),
+    path('user/edit/', views.user_edit, name='user_edit'),
 ]
