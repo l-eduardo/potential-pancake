@@ -22,6 +22,6 @@ RUN pip install -r requirements.txt
 # Copia o projeto
 COPY . /app
 
-EXPOSE 8000
+EXPOSE 8000:8000
 
 CMD ["python manage.py makemigrations", "python manage.py migrate","python manage.py runserver 0.0.0.0:8000" ]
