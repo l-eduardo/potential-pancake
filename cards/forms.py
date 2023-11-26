@@ -5,7 +5,7 @@ from .models import Card, SharedCard
 class CardForm(forms.ModelForm):
     class Meta:
         model = Card
-        fields = ('id', 'title', 'description', 'owner')
+        fields = ('id', 'title', 'owner')
 
 
 class SharedCardForm(forms.ModelForm):

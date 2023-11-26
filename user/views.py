@@ -20,7 +20,7 @@ def register(request):
             user = form.cleaned_data.get('username')
             messages.success(request, 'Account created successfully!' + user)
 
-            return redirect('login')
+            return redirect('user:login')
 
     context = {'form': form}
     return render(request, 'register.html', context)
@@ -36,7 +36,7 @@ def user_login(request):
 
         if user is not None:
             login(request, user)
-            return redirect('tasks:list_all')
+            return redirect('cards:list_all')
 
         else:
             messages.info(request, 'Username OR password is incorrect')

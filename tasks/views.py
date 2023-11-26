@@ -74,6 +74,6 @@ def complete(request, pk):
     if task.card.user_has_permission(request.user, "change_task"):
         task.completed = task.completed == False
         task.save()
-        return redirect('tasks:list_all')
+        return redirect('cards:list_all')
 
     return HttpResponseForbidden("Você não tem permissão para completar esta tarefa.")
