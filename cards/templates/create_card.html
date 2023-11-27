@@ -98,6 +98,10 @@
           border-color: #007bff; /* Cor azul como exemplo, você pode ajustar conforme necessário */
           box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
         }
+
+        .display-none {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -115,8 +119,11 @@
         <label for="title">Title:</label>
         {{ form.title }}
 
-        <label for="owner">Owner:</label>
-        {{ form.owner }}
+        <div class="display-none">
+            <label for="owner">Owner:</label>
+            {{ form.owner }}
+        </div>
+
         <div class='button-container'>
             <button type="submit">Save</button>
         </div>

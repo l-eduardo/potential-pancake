@@ -143,6 +143,17 @@
             align-items: center;
             justify-content: space-between;
         }
+
+        .container-card-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .container-owner {
+            display: flex;
+            align-items: center;
+        }
         
         .complete-anchor {
             height: 100%;
@@ -176,7 +187,19 @@
     <ul>
         {% for card, tasks in cards_tasks.items %}
             <li>
-                <a href="{% url 'cards:find_by_id' pk=card.id%}"><strong>{{ card.title }}</strong> - {{ card.owner }}</a>
+                <a href="{% url 'cards:find_by_id' pk=card.id%}">
+                    <div class="container-card-title">
+                        <strong>
+                            {{ card.title }}
+                        </strong>
+                        <div class="container-owner">
+                            <span class="material-symbols-outlined">
+                                person
+                            </span> 
+                            {{ card.owner }}
+                        </div>
+                    </div>
+                </a>
                 <ol>
                     {% for task in tasks %}
                         <a href="{% url 'tasks:complete' pk=task.id%}" class="complete-anchor">

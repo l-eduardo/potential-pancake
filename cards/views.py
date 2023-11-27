@@ -52,6 +52,7 @@ def create(request):
         return HttpResponseForbidden('Você não tem permissão para criar cards para outros usuários.')
     elif request.method == 'GET':
         form = CardForm()
+        form.fields["owner"].initial = request.user.id
         return render(request, 'create_card.html', {'form': form})
 
 
