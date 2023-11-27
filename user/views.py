@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
 
-from user.forms import CreateUserForm, EmailOnlyPasswordResetForm
+from user.forms import CreateUserForm, EditPasswordForm, EditUserForm, EmailOnlyPasswordResetForm
 
 
 def register(request):
@@ -47,18 +47,39 @@ def user_login(request):
 @login_required()
 def user_edit(request):
     if request.method == 'POST':
-        form = CreateUserForm(request.POST, instance = request.user)
+        form = EditUserForm(request.POST, instance = request.user)
         if form.is_valid():
             form.save()
             messages.success(request, 'User information updated successfully!')
-            return redirect('tasks')
+            return redirect('cards:list_all')
         
     else:
-        form = CreateUserForm(instance=request.user)
+        form = EditUserForm(instance=request.user)
     
     context = {'form':form}
     return render(request, 'user_edit.html', context)
-  
+
+@login_required()
+def change_password(request):
+    if request.method == 'POST':
+        form = EditPasswordForm(request.POST)
+        old_password = request.POST.get('old_password')
+        new_password = request.POST.get('new_password1')
+
+        user = authenticate(request, username=request.user.username, password=old_password)
+        if user is not None and form.is_valid():
+            user.set_password(new_password)
+            user.save()
+            return redirect('cards:list_all')
+
+ 
+        form = EditPasswordForm()
+    print(form.errors)
+
+    context = {'form': form}
+    return render(request, 'change_password.html', context)
+
+
 def reset_password(request):
     if request.method == "POST":
         form = EmailOnlyPasswordResetForm(request.POST)
