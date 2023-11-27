@@ -21,3 +21,5 @@ RUN pip install -r requirements.txt
 
 # Copia o projeto
 COPY . /app
+
+EXPOSE 8000:8000
