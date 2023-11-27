@@ -1,8 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
+from django.contrib.auth import authenticate, login, update_session_auth_hash, logout as auth_logout
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
-from django.contrib.auth import authenticate, login, update_session_auth_hash
-from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.mail import send_mail
@@ -26,6 +25,7 @@ def register(request):
     context = {'form': form}
     return render(request, 'register.html', context)
 
+
 def user_login(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -43,16 +43,17 @@ def user_login(request):
     context = {}
     return render(request, 'login.html', context)
 
-@login_required()
+
+@login_required
 def logout(request):
     auth_logout(request)
     return redirect('user:login')
     
 
-@login_required()
+@login_required
 def user_edit(request):
     if request.method == 'POST':
-        form = EditUserForm(request.POST, instance = request.user)
+        form = EditUserForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
             messages.success(request, 'User information updated successfully!')
@@ -63,6 +64,7 @@ def user_edit(request):
     
     context = {'form':form}
     return render(request, 'user_edit.html', context)
+
 
 @login_required
 def change_password(request):
