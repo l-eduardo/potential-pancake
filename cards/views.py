@@ -161,6 +161,7 @@ def share(request):
         return render(request, 'share_card.html', {'form': form})
 
 
+
 def caller_is_owner(request):
     """
     Verifica se o usuário que fez a chamada é o proprietário do card. Usado quando o card
@@ -195,3 +196,10 @@ def get_cards_for_user(user):
     cards = list(owned_cards) + list(shared_cards)
 
     return cards
+
+@login_required()
+def share_to_card(request, pk):
+    if request.method == "GET":
+        form = SharedCardForm()
+        form.fields["card"].initial = pk
+        return render(request, 'share_card.html', {'form': form})
