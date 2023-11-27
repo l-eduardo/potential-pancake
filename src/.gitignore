@@ -62,7 +62,7 @@ docs/_build/
 target/
 
 # JetBrains
-.idea
+../.idea
 
 #Docker volumes trash
 postgres_data
