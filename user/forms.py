@@ -26,3 +26,5 @@ class EmailOnlyPasswordResetForm(PasswordResetForm):
     class Meta:
         model = User
         fields = ['email']
+        
+    

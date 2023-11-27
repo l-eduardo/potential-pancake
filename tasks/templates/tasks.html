@@ -1,128 +1,101 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard de Tarefas</title>
-<style>
-  body {
-    margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #e6e6e6;
-    display: flex;
-    height: 100vh;
-    overflow: hidden;
-  }
-  .sidebar {
-    background-color: #1a1a1a;
-    color: white;
-    width: 250px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-  }
-  .sidebar button {
-    background: none;
-    border: none;
-    color: white;
-    padding: 15px;
-    margin-bottom: 5px;
-    text-align: left;
-    cursor: pointer;
-    border-left: 3px solid transparent;
-    transition: all 0.3s;
-  }
-  .sidebar button:hover {
-    background-color: #333;
-    border-left: 3px solid #4a90e2;
-  }
-  .main-content {
-    flex-grow: 1;
-    padding: 20px;
-    overflow-y: auto;
-  }
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 20px;
-  }
-  .header button {
-    background-color: #4a90e2;
-    border: none;
-    color: white;
-    padding: 10px 20px;
-    margin-right: 10px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-  }
-  .header button:hover {
-    background-color: #357abd;
-  }
-  .task-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    grid-gap: 20px;
-    padding: 20px;
-    background-color: white;
-    border-radius: 10px;
-  }
-  .task {
-    background-color: #f0f0f0;
-    padding: 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: transform 0.3s, box-shadow 0.3s;
-  }
-  .task:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-  }
-</style>
+    <title>Lista de Tarefas</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e6e6e6;
+            display: flex;
+            flex-direction: column;
+            #align-items: center;
+            min-height: 100vh; /* Altura mínima da tela inteira */
+        }
+
+        h1 {
+            text-align: center;
+            color: black;
+            margin-top: 20px;
+        }
+
+        .button-container {
+            text-align: center;
+        }
+
+        .button-container button {
+            background-color: #4a90e2;
+            color: #fff;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            display: inline-block;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-bottom: 20px;
+            border: 2px solid black; /* Adiciona uma borda preta */
+        }
+
+        .button-container button:hover {
+            background-color: #357abd;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-gap: 20px;
+            padding: 20px;
+            justify-content: center; /* Centraliza o grid na página */
+        }
+
+        li {
+            background-color: #f0f0f0;
+            padding: 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        li:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        .action-links {
+            margin-top: 10px;
+        }
+
+        .action-links a {
+            margin-right: 10px;
+        }
+    </style>
 </head>
 <body>
-
-<div class="sidebar">
-  <button onclick="showSection('home')">Home</button>
-  <button onclick="showSection('settings')">Settings</button>
-  <button onclick="showSection('personal')">Personal</button>
-</div>
-
-<div class="main-content">
-  <div class="header">
-    <button onclick="addTask()">+ New Task</button>
-    <button onclick="applyFilter()">Filters</button>
-    <button onclick="openProfile()">Perfil</button>
-  </div>
-
-  <div class="task-list" id="taskList">
-    <!-- Task content dynamically inserted here -->
-  </div>
-</div>
-
-<script>
-  function showSection(section) {
-    alert('Section ' + section + ' clicked');
-  }
-
-  function addTask() {
-    const taskList = document.getElementById('taskList');
-    const newTask = document.createElement('div');
-    newTask.classList.add('task');
-    newTask.textContent = 'Nova Tarefa';
-    newTask.onclick = function() { alert('Tarefa clicada'); };
-    taskList.appendChild(newTask);
-  }
-
-  function applyFilter() {
-    alert('Filter clicked');
-  }
-
-  function openProfile() {
-    alert('Profile clicked');
-  }
-</script>
-
+    <h1>Lista de Tarefas</h1>
+    <div class="button-container">
+        <button onclick="location.href='{% url 'tasks:create' %}'">Criar Tarefa</button>
+    </div>
+    <ul>
+        {% for task in tasks %}
+            <li>
+                <p class="description">Descrição: {{ task.description }} </p>
+                <p class="finalizada">Finalizada: {{ task.completed }} </p>
+                <p class="card">Card: {{ task.card }} </p>
+                <p>ID: {{ task.id }}</p>
+                <div class="action-links">
+                    <a href="{% url 'tasks:update' pk=task.id%}">Atualizar</a>
+                    <a href="{% url 'tasks:complete' pk=task.id%}">Completar</a>
+                    <a href="{% url 'tasks:delete' pk=task.id%}">Excluir</a>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
 </body>
 </html>

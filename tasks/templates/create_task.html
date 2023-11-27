@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-    <title>Criar Tarefa</title>
+    <title>Create Task</title>
     <style>
         body {
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #e6e6e6;
+            background-color: #373737;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -14,7 +14,7 @@
         }
 
         form {
-            background-color: #fff;
+            background-color: #D9D9D9;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
@@ -41,21 +41,27 @@
             border-radius: 4px;
         }
 
+        .button-container {
+            text-align: center;
+            margin: 16px 0;
+        }
+
         button {
+            opacity: 0.7;
             background-color: #4a90e2;
             color: #fff;
             padding: 15px;
             border: none;
-            border-radius: 4px;
+            border-radius: 5px;
+            display: inline-block;
             cursor: pointer;
-            width: 100%;
-            margin-bottom: 10px;
-            margin-top: 20px;
-            transition: background-color 0.3s;
+            transition: 0.5s;
+            border: 2px solid black;
+            font-weight: bold;
+            width: 40%;
         }
-
         button:hover {
-            background-color: #357abd;
+            opacity: 1;
         }
 
         a {
@@ -69,15 +75,19 @@
 <body>
     <form method="post" action="{% url 'tasks:create' %}">
         {% csrf_token %}
-        <h1>Criar Tarefa</h1>
+        <h1>Create Task</h1>
 
-        <label for="description">Descrição:</label>
+        <label for="description">Description:</label>
         {{ form.description }}
 
-        <label class="card_button" for="card">Card:</label>
-        {{ form.card }}
-        <button type="submit">Salvar</button>
-        <a href="{% url 'tasks:list_all' %}">Voltar</a>
+        <div style="display: ;">
+            <label class="card_button" for="card">Card:</label>
+            {{ form.card }}
+        </div>
+        <div class='button-container'>
+            <button type="submit">Save</button>
+            <a href="{% url 'cards:list_all' %}">Go back</a>
+        </div>
     </form>
 </body>
 </html>

@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, update_session_auth_hash
+from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.mail import send_mail
@@ -18,14 +19,12 @@ def register(request):
         if form.is_valid():
             form.save()
             user = form.cleaned_data.get('username')
-            messages.success(request, 'Account created successfully!' + user)
+            messages.success(request, 'Account created successfully! ' + user)
 
             return redirect('user:login')
 
     context = {'form': form}
     return render(request, 'register.html', context)
-
-
 
 def user_login(request):
     if request.method == 'POST':
@@ -45,6 +44,12 @@ def user_login(request):
     return render(request, 'login.html', context)
 
 @login_required()
+def logout(request):
+    auth_logout(request)
+    return redirect('user:login')
+    
+
+@login_required()
 def user_edit(request):
     if request.method == 'POST':
         form = EditUserForm(request.POST, instance = request.user)
@@ -59,25 +64,19 @@ def user_edit(request):
     context = {'form':form}
     return render(request, 'user_edit.html', context)
 
-@login_required()
+@login_required
 def change_password(request):
     if request.method == 'POST':
-        form = EditPasswordForm(request.POST)
-        old_password = request.POST.get('old_password')
-        new_password = request.POST.get('new_password1')
-
-        user = authenticate(request, username=request.user.username, password=old_password)
-        if user is not None and form.is_valid():
-            user.set_password(new_password)
-            user.save()
+        form = EditPasswordForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Sua senha foi alterada com sucesso!')
             return redirect('cards:list_all')
+    else:
+        form = EditPasswordForm(request.user)
 
- 
-        form = EditPasswordForm()
-    print(form.errors)
-
-    context = {'form': form}
-    return render(request, 'change_password.html', context)
+    return render(request, 'change_password.html', {'form': form}) 
 
 
 def reset_password(request):

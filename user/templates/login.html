@@ -20,6 +20,8 @@
 		.user_card {
 			width: 350px;
 			flex-shrink: 0;
+			margin-left: auto;
+			margin-right: auto;
 			margin-top: auto;
 			margin-bottom: auto;
 			background: var(--second-color, #D9D9D9);
@@ -31,7 +33,7 @@
 			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 			-webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 			-moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-			border-radius: 30px;
+			border-radius: 10px;
 
 		}
 
@@ -41,7 +43,7 @@
 
 		#form-title{
 			color: #3d3939;
-			
+			font-size: x-large;
 		}
 
 		.login_btn {
@@ -71,14 +73,15 @@
 		}
 
 		#messages{
+			font-size: x-small;
 			background-color: grey;
 			color: #fff;
 			padding: 10px;
+			margin: auto;
 			margin-top: 10px;
-			margin-left: 245px;
 			border-radius: 10px;
 			text-align: center;
-			width: 300px;
+			width: 200px;
 		}
 
 	</style>
@@ -128,7 +131,7 @@
 					</div>
 
 					<div class="d-flex justify-content-center links">
-						Forgot my password <a href="{% url 'user:reset_password' %}" class="ml-2">Reset Password</a>
+						Forgot my password <a href="{% url 'user:reset_password' %}" class="ml-2">Reset Password</a> 
 					</div>
 				</div>
 			</div>

@@ -1,4 +1,4 @@
-from django.shortcuts import redirect, render, get_object_or_404, get_list_or_404
+from django.shortcuts import redirect, render, get_object_or_404
 from django.http import HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
 
@@ -70,7 +70,7 @@ def update(request, pk):
         form = CardForm(request.POST, instance=card)
         if form.is_valid() and card.user_has_permission(request.user, "change_card"):
             form.save()
-            return redirect('cards:find_by_id', card.id)
+            return redirect('cards:list_all')
 
         return HttpResponseForbidden("Você não tem permissão para atualizar este card.")
 
@@ -93,7 +93,7 @@ def get_cards_for_user(user):
 @login_required()
 def find_by_id(request, pk):
     card = get_object_or_404(Card, pk=pk)
-    tasks = get_list_or_404(Task, card=card)
+    tasks = Task.objects.filter(card=card)
     if card.user_has_permission(request.user, "view_card"):
         return render(request, 'card.html', {
             'card': card,

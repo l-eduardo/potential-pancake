@@ -15,15 +15,16 @@ def list_all(request):
     return render(request, 'tasks.html', {'tasks': tasks})
 
 
-@login_required()
+@login_required
 def create(request):
     if request.method == "POST":
         form = TaskForm(request.POST)
         card_id = request.POST.get('card')
-        card = get_object_or_404(Card, id=card_id, owner=request.user)
+        card = Card.objects.get(id=card_id)
+        print(card)
         if form.is_valid() and card.user_has_permission(request.user, "create_task"):
             form.save()
-            return redirect('tasks:list_all')
+            return redirect('cards:list_all')
     elif request.method == "GET":
         form = TaskForm()
         return render(request, 'create_task.html', {'form': form})
@@ -35,7 +36,7 @@ def delete(request, pk):
 
     if task.card.user_has_permission(request.user, "delete_task"):
         task.delete()
-        return redirect('tasks:list_all')
+        return redirect('cards:list_all')
 
     return HttpResponseForbidden("Você não tem permissão para remover esta tarefa.")
 
@@ -77,3 +78,11 @@ def complete(request, pk):
         return redirect('cards:list_all')
 
     return HttpResponseForbidden("Você não tem permissão para completar esta tarefa.")
+
+@login_required
+def create_task_to_card(request, pk):
+    if request.method == "GET":
+        form = TaskForm()
+        print(form.fields.keys())
+        form.fields["card"].initial = pk
+        return render(request, 'create_task.html', {'form': form})
