@@ -145,7 +145,6 @@ def update_share(request, pk):
         form = SharedCardForm(request.POST, instance=shared_card)
         if shared_card and shared_card.card.user_is_owner(request.user) and form.is_valid():
             form.save()
-            print('SALVEI')
             return redirect('cards:list_shared_card_users', shared_card.card.id)
 
         return HttpResponseForbidden("Você não tem permissão para atualizar o compartilhamento deste card.")
