@@ -163,7 +163,7 @@
             </span>
             New Task
         </button>
-        <button onclick="location.href='{% url 'cards:share' pk=card.id %}'">
+        <button onclick="location.href='{% url 'cards:list_shared_card_users' pk=card.id %}'">
             <span class="material-symbols-outlined" id="add-icon">
                 share
             </span>

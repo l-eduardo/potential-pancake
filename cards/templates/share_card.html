@@ -108,7 +108,7 @@
 <body>
     <form method="POST" action="{% url 'cards:share' %}">
         <div class="go-back">
-            <a href="javascript:history.go(-1);">
+            <a href="{% url 'cards:list_all' %}">
                 <span class="material-symbols-outlined">
                 arrow_circle_left
                 </span>
