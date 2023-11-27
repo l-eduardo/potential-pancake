@@ -2,6 +2,7 @@
 <html lang="pt">
 <head>
     <title>Create Task</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <style>
         body {
             margin: 0;
@@ -24,6 +25,7 @@
         h1 {
             text-align: center;
             color: #333;
+            margin-top: 0;
         }
 
         label {
@@ -70,11 +72,24 @@
             text-align: center;
             color: #333;
         }
+
+        .go-back {
+            display: flex;
+            align-items: left;
+        }
     </style>
 </head>
 <body>
     <form method="post" action="{% url 'tasks:create' %}">
         {% csrf_token %}
+        <div class="go-back">
+            <a href="{% url 'cards:list_all' %}">
+                <span class="material-symbols-outlined">
+                arrow_circle_left
+                </span>
+            </a>
+        </div>
+
         <h1>Create Task</h1>
 
         <label for="description">Description:</label>
@@ -86,7 +101,6 @@
         </div>
         <div class='button-container'>
             <button type="submit">Save</button>
-            <a href="{% url 'cards:list_all' %}">Go back</a>
         </div>
     </form>
 </body>
