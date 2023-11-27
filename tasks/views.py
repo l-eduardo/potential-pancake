@@ -17,14 +17,14 @@ def list_all(request):
 
 @login_required
 def create(request):
-    if request.method == "POST":
+    if request.method == 'POST':
         form = TaskForm(request.POST)
         card_id = request.POST.get('card')
         card = Card.objects.get(id=card_id)
-        if form.is_valid() and card.user_has_permission(request.user, "create_task"):
+        if form.is_valid() and card.user_has_permission(request.user, 'create_task'):
             form.save()
             return redirect('cards:list_all')
-    elif request.method == "GET":
+    elif request.method == 'GET':
         form = TaskForm()
         return render(request, 'create_task.html', {'form': form})
 
@@ -33,11 +33,11 @@ def create(request):
 def delete(request, pk):
     task = Task.objects.get(pk=pk)
 
-    if task.card.user_has_permission(request.user, "delete_task"):
+    if task.card.user_has_permission(request.user, 'delete_task'):
         task.delete()
         return redirect('cards:list_all')
 
-    return HttpResponseForbidden("Você não tem permissão para remover esta tarefa.")
+    return HttpResponseForbidden('Você não tem permissão para remover esta tarefa.')
 
 
 @login_required
@@ -46,11 +46,11 @@ def update(request, pk):
 
     if request.method == 'POST':
         form = TaskForm(request.POST, instance=task)
-        if form.is_valid() and task.card.user_has_permission(request.user, "change_task"):
+        if form.is_valid() and task.card.user_has_permission(request.user, 'change_task'):
             form.save()
             return redirect('tasks:find_by_id', task.id)
 
-        return HttpResponseForbidden("Você não tem permissão para atualizar esta tarefa.")
+        return HttpResponseForbidden('Você não tem permissão para atualizar esta tarefa.')
 
     form = TaskForm(instance=task)
 
@@ -61,27 +61,27 @@ def update(request, pk):
 def find_by_id(request, pk):
     task = Task.objects.get(pk=pk)
 
-    if task.card.user_has_permission(request.user, "view_task"):
+    if task.card.user_has_permission(request.user, 'view_task'):
         return render(request, 'task.html', {'task': task})
 
-    return HttpResponseForbidden("Você não tem permissão para acessar esta tarefa.")
+    return HttpResponseForbidden('Você não tem permissão para acessar esta tarefa.')
 
 
 @login_required
 def complete(request, pk):
     task = Task.objects.get(pk=pk)
 
-    if task.card.user_has_permission(request.user, "change_task"):
+    if task.card.user_has_permission(request.user, 'change_task'):
         task.completed = task.completed == False
         task.save()
         return redirect('cards:list_all')
 
-    return HttpResponseForbidden("Você não tem permissão para completar esta tarefa.")
+    return HttpResponseForbidden('Você não tem permissão para completar esta tarefa.')
 
 
 @login_required
 def create_task_to_card(request, pk):
-    if request.method == "GET":
+    if request.method == 'GET':
         form = TaskForm()
-        form.fields["card"].initial = pk
+        form.fields['card'].initial = pk
         return render(request, 'create_task.html', {'form': form})

@@ -23,15 +23,15 @@ def list_all(request):
 
 @login_required
 def create(request):
-    if request.method == "POST":
+    if request.method == 'POST':
         form = CardForm(request.POST)
 
         if form.is_valid() and caller_is_owner(request):
             form.save()
             return redirect('cards:list_all')
 
-        return HttpResponseForbidden("Você não tem permissão para criar cards para outros usuários.")
-    elif request.method == "GET":
+        return HttpResponseForbidden('Você não tem permissão para criar cards para outros usuários.')
+    elif request.method == 'GET':
         form = CardForm()
         return render(request, 'create_card.html', {'form': form})
 
@@ -43,12 +43,12 @@ def delete(request, pk):
         card.delete()
         return redirect('cards:list_all')
 
-    return HttpResponseForbidden("Você não tem permissão para remover este card.")
+    return HttpResponseForbidden('Você não tem permissão para remover este card.')
 
 
 @login_required
 def share(request):
-    if request.method == "POST":
+    if request.method == 'POST':
         card_id = request.POST.get('card')
         card = Card.objects.get(id=card_id, owner=request.user)
 
@@ -61,8 +61,8 @@ def share(request):
                 form.save()
             return redirect('cards:list_all')
 
-        return HttpResponseForbidden("Você não tem permissão para compartilhar este card.")
-    elif request.method == "GET":
+        return HttpResponseForbidden('Você não tem permissão para compartilhar este card.')
+    elif request.method == 'GET':
         form = SharedCardForm()
         return render(request, 'share_card.html', {'form': form})
 
@@ -77,7 +77,7 @@ def update(request, pk):
             form.save()
             return redirect('cards:list_all')
 
-        return HttpResponseForbidden("Você não tem permissão para atualizar este card.")
+        return HttpResponseForbidden('Você não tem permissão para atualizar este card.')
 
     form = CardForm(instance=card)
 
@@ -88,18 +88,18 @@ def update(request, pk):
 def find_by_id(request, pk):
     card = Card.objects.get(pk=pk)
     tasks = Task.objects.filter(card=card)
-    if card.user_has_permission(request.user, "view_card"):
+    if card.user_has_permission(request.user, 'view_card'):
         return render(request, 'card.html', {
             'card': card,
             'tasks': tasks
         })
 
-    return HttpResponseForbidden("Você não tem permissão para acessar este card.")
+    return HttpResponseForbidden('Você não tem permissão para acessar este card.')
 
 
 @login_required
 def share(request):
-    if request.method == "POST":
+    if request.method == 'POST':
         form = SharedCardForm(request.POST)
         card_id = request.POST.get('card')
         card = Card.objects.get(pk=card_id)
@@ -109,8 +109,8 @@ def share(request):
 
         messages.success(request, 'Sua senha foi alterada com sucesso!')
 
-        return HttpResponseForbidden("Você não tem permissão para compartilhar este card.")
-    elif request.method == "GET":
+        return HttpResponseForbidden('Você não tem permissão para compartilhar este card.')
+    elif request.method == 'GET':
         form = SharedCardForm()
         return render(request, 'share_card.html', {'form': form})
 

@@ -13,7 +13,7 @@ from user.forms import CreateUserForm, EditPasswordForm, EditUserForm, EmailOnly
 def register(request):
     form = CreateUserForm()
 
-    if request.method == "POST":
+    if request.method == 'POST':
         form = CreateUserForm(request.POST)
         if form.is_valid():
             form.save()
@@ -82,7 +82,7 @@ def change_password(request):
 
 
 def reset_password(request):
-    if request.method == "POST":
+    if request.method == 'POST':
         form = EmailOnlyPasswordResetForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data['email']
