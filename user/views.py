@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate, login
+from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.mail import send_mail
@@ -18,14 +19,12 @@ def register(request):
         if form.is_valid():
             form.save()
             user = form.cleaned_data.get('username')
-            messages.success(request, 'Account created successfully!' + user)
+            messages.success(request, 'Account created successfully! ' + user)
 
             return redirect('user:login')
 
     context = {'form': form}
     return render(request, 'register.html', context)
-
-
 
 def user_login(request):
     if request.method == 'POST':
@@ -44,7 +43,13 @@ def user_login(request):
     context = {}
     return render(request, 'login.html', context)
 
-@login_required
+@login_required()
+def logout(request):
+    auth_logout(request)
+    return redirect('user:login')
+    
+
+@login_required()
 def user_edit(request):
     if request.method == 'POST':
         form = CreateUserForm(request.POST, instance = request.user)

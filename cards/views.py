@@ -1,4 +1,4 @@
-from django.shortcuts import redirect, render, get_object_or_404, get_list_or_404
+from django.shortcuts import redirect, render, get_object_or_404
 from django.http import HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
 
@@ -93,7 +93,7 @@ def get_cards_for_user(user):
 @login_required
 def find_by_id(request, pk):
     card = get_object_or_404(Card, pk=pk)
-    tasks = get_list_or_404(Task, card=card)
+    tasks = Task.objects.filter(card=card)
     if card.user_has_permission(request.user, "view_card"):
         return render(request, 'card.html', {
             'card': card,
