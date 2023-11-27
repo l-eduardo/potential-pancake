@@ -11,6 +11,15 @@ from user.forms import CreateUserForm, EditPasswordForm, EditUserForm, EmailOnly
 
 
 def register(request):
+    """
+    Registra um novo usuário.
+
+    Args:
+        request (HttpRequest): Objeto de solicitação Django.
+
+    Returns:
+        HttpResponse: Resposta HTTP redirecionando para a página de login após o registro bem-sucedido.
+    """
     form = CreateUserForm()
 
     if request.method == 'POST':
@@ -27,6 +36,15 @@ def register(request):
 
 
 def user_login(request):
+    """
+    Autentica o usuário no sistema.
+
+    Args:
+        request (HttpRequest): Objeto de solicitação Django.
+
+    Returns:
+        HttpResponse: Resposta HTTP redirecionando para a lista de cards após o login bem-sucedido.
+    """
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -46,12 +64,30 @@ def user_login(request):
 
 @login_required
 def logout(request):
+    """
+    Realiza o logout do usuário.
+
+    Args:
+        request (HttpRequest): Objeto de solicitação Django.
+
+    Returns:
+        HttpResponse: Resposta HTTP redirecionando para a página de login.
+    """
     auth_logout(request)
     return redirect('user:login')
     
 
 @login_required
 def user_edit(request):
+    """
+    Edita as informações do usuário.
+
+    Args:
+        request (HttpRequest): Objeto de solicitação Django.
+
+    Returns:
+        HttpResponse: Resposta HTTP redirecionando para a lista de cards após a atualização das informações do usuário.
+    """
     if request.method == 'POST':
         form = EditUserForm(request.POST, instance=request.user)
         if form.is_valid():
@@ -68,6 +104,15 @@ def user_edit(request):
 
 @login_required
 def change_password(request):
+    """
+    Altera a senha do usuário.
+
+    Args:
+        request (HttpRequest): Objeto de solicitação Django.
+
+    Returns:
+        HttpResponse: Resposta HTTP redirecionando para a lista de cards após a alteração da senha.
+    """
     if request.method == 'POST':
         form = EditPasswordForm(request.user, request.POST)
         if form.is_valid():
@@ -82,11 +127,20 @@ def change_password(request):
 
 
 def reset_password(request):
+    """
+    Redefine a senha do usuário.
+
+    Args:
+        request (HttpRequest): Objeto de solicitação Django.
+
+    Returns:
+        HttpResponse: Resposta HTTP indicando o sucesso ou falha da redefinição da senha.
+    """
     if request.method == 'POST':
         form = EmailOnlyPasswordResetForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data['email']
-            generate_new_password(email)
+            reset_and_notify_password(email)
             return HttpResponse('Password updated successfully.')
 
         return HttpResponse('Invalid request.')
@@ -96,7 +150,16 @@ def reset_password(request):
     return render(request, 'reset_password.html', context)
 
 
-def generate_new_password(email):
+def reset_and_notify_password(email):
+    """
+    Gera uma nova senha aleatória para o usuário e a envia por e-mail.
+
+    Args:
+        email (str): Endereço de e-mail do usuário.
+
+    Returns:
+        None
+    """
     user = get_object_or_404(User, email=email)
     new_password = User.objects.make_random_password()
     user.password = make_password(new_password)
