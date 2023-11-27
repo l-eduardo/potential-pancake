@@ -38,36 +38,31 @@ Para iniciar a aplicação em sua máquina, siga as etapas a seguir:
    $ docker-compose --version
    $ make --version
 
-3. Execute os seguintes comandos:
-- Crie e inicialize os containers
+3. Inicialize a aplicação:
    ```bash
-   make build
+   $ make build
    ```
-- Inicialize o servidor
-    ```bash
-    make start
-    ```
   
 ## Comandos de configuração
 - Cria as migrações
     ```bash
-    make makemigrations
+    $ make makemigrations
     ```
 - Executa as migrações
     ```bash
-    make migrate
+    $ make migrate
     ```
 - Criar um usuario admin
     ```bash
-    make createsuperuser
+    $ make createsuperuser
     ```
 - Encerra execução dos containers
     ```bash
-    make stop
+    $ make stop
     ```
 - Remove os containers
     ```bash
-    make down
+    $ make down
     ```
 
 ## Como rodar no windows 
