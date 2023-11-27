@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-BR">
 <head>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
  
@@ -162,6 +162,12 @@
                 add
             </span>
             New Task
+        </button>
+        <button onclick="location.href='{% url 'cards:share' %}'">
+            <span class="material-symbols-outlined" id="add-icon">
+                share
+            </span>
+            Share
         </button>
     </div>
     <div class="user-buttons">
