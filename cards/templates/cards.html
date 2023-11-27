@@ -67,7 +67,7 @@
         }
 
 
-        @media only screen and (max-width: 600px) {
+        @media only screen and (max-width: 700px) {
             li {
               flex: 0 0 calc(80% - 20px); /* Define a largura dos cards e ajusta a margem */
             }
@@ -98,6 +98,7 @@
             text-decoration: none;
 
         }
+
         .botoes{
             color: #4a90e2;
             bottom: 0;
@@ -123,21 +124,49 @@
             display: block;
             margin: 10px 0;
         }
-        li.completed {
-            text-decoration: line-through;
-            color: #666; /* Adjust color for completed tasks */
+
+        input {
+            position: relative;
+            z-index: -1;
         }
+
         .material-symbols-outlined {
-        font-variation-settings:
-        'FILL' 0,
-        'wght' 400,
-        'GRAD' 0,
-        'opsz' 3
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 3
         }
+
         .container-task{
             display: flex;
             align-items: center;
             justify-content: space-between;
+        }
+        
+        .complete-anchor {
+            height: 100%;
+            width: 100%;
+            z-index: 2;
+        }
+
+        .user-buttons {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 20px;
+        }
+
+        #edit-user-button {
+            color: #D9D9D9;
+            font-size: 30px;
+            padding: 0 5px;
+        }
+
+        #logout-button {
+            color: #D9D9D9;
+            font-size: 30px;
+            padding: 0 5px;
         }
 
     </style>
@@ -150,12 +179,12 @@
                 <a href="{% url 'cards:find_by_id' pk=card.id%}"><strong>{{ card.title }}</strong> - {{ card.owner }}</a>
                 <ol>
                     {% for task in tasks %}
-                        <a href="{% url 'tasks:complete' pk=task.id%}">
+                        <a href="{% url 'tasks:complete' pk=task.id%}" class="complete-anchor">
                             <li {% if task.completed %}class="completed"{% endif %}>
                                 <div class='container-task'>
                                         <input type='checkbox' {% if task.completed %}checked{% endif %} disabled>
                                         {{ task.description }}
-                                    <a href="{% url 'tasks:delete' pk=task.id%}" class="material-symbols-outlined">
+                                    <a href="{% url 'tasks:delete' pk=task.id%}" class="material-symbols-outlined" id="delete-task-button">
                                         close
                                     </a>
                                 </div>
@@ -181,7 +210,19 @@
         {% endfor %}
     </ul>
     <div class="button-container">
-        <button onclick="location.href='{% url 'cards:create' %}'">Criar Card</button>
+        <button onclick="location.href='{% url 'cards:create' %}'">Create Card</button>
+    </div>
+    <div class="user-buttons">
+        <a href="{% url 'user:user_edit' %}">
+            <span class="material-symbols-outlined" id="edit-user-button">
+                account_circle
+            </span>
+        </a>
+        <a href="{% url 'user:logout' %}">
+            <span class="material-symbols-outlined" id="logout-button">
+                logout
+            </span>
+        </a>
     </div>
 </body>
 </html>
