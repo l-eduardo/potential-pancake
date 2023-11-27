@@ -113,3 +113,11 @@ def share(request):
     elif request.method == "GET":
         form = SharedCardForm()
         return render(request, 'share_card.html', {'form': form})
+
+
+@login_required()
+def share_to_card(request, pk):
+    if request.method == "GET":
+        form = SharedCardForm()
+        form.fields["card"].initial = pk
+        return render(request, 'share_card.html', {'form': form})
