@@ -100,9 +100,13 @@ def find_by_id(request, pk):
 @login_required
 def share(request):
     if request.method == 'POST':
-        form = SharedCardForm(request.POST)
         card_id = request.POST.get('card')
         card = Card.objects.get(pk=card_id)
+        shared_with_id = request.POST.get('shared_with')
+        shared_with = User.objects.get(pk=shared_with_id)
+        shared_card = SharedCard.objects.filter(card=card, shared_with=shared_with).first()
+        form = SharedCardForm(request.POST, instance=shared_card)
+
         if form.is_valid() and card.user_is_owner(request.user):
             form.save()
             return redirect('cards:list_all')
