@@ -21,9 +21,10 @@ def create(request):
         form = TaskForm(request.POST)
         card_id = request.POST.get('card')
         card = Card.objects.get(id=card_id)
-        if form.is_valid() and card.user_has_permission(request.user, 'create_task'):
+        if form.is_valid() and card.user_has_permission(request.user, 'add_task'):
             form.save()
             return redirect('cards:list_all')
+        return HttpResponseForbidden('Você não tem permissão para criar tarefas neste card.')
     elif request.method == 'GET':
         form = TaskForm()
         return render(request, 'create_task.html', {'form': form})
