@@ -106,7 +106,7 @@
     </style>
 </head>
 <body>
-    <form method="POST" action="{% url 'cards:share' %}">
+    <form method="POST" action="{% url 'cards:update_share' pk=shared_card_id %}">
         <div class="go-back">
             <a href="javascript:history.go(-1);">
                 <span class="material-symbols-outlined">
@@ -122,8 +122,10 @@
             {{ form.card }}
         </div>
 
-        <label for="shared_with">Shared With:</label>
-        {{ form.shared_with }}
+        <div class="display-none">
+            <label for="shared_with">Shared With:</label>
+            {{ form.shared_with }}
+        </div>
 
         <label for="shared_group">Shared Group:</label>
         {{ form.shared_group }}
