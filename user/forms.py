@@ -19,7 +19,7 @@ class EditPasswordForm(PasswordChangeForm):
     class Meta:
         model = User
 
-        fields = ['old_password', 'new_password1', 'new_password2']
+        fields = ['current_password', 'new_password1', 'new_password2']
 
 
 class EmailOnlyPasswordResetForm(PasswordResetForm):
