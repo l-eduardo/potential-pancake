@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <title>Card {{ card.title }} shares</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #373737;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            color: #D9D9D9;
+        }
+
+        h1 {
+            margin-top: 20px;
+        }
+
+        .cards-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            width: 80%;
+            flex-wrap: wrap;
+        }
+
+        .card-box {
+            display: flex;
+            flex-direction: column;
+            height: 200px;
+            width: 230px;
+            border: 2px solid #D9D9D9;
+            border-radius: 8px;
+            padding: 20px 10px;
+            margin: 20px;
+            transition: box-shadow 0.3s, transform 0.3s;
+            background-color: #D9D9D9;
+            opacity: 0.8;
+            justify-content: space-between;
+        }
+
+        .card-box:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transform: translateY(-5px);
+            opacity: 1;
+        }
+
+        .container-card {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .user-buttons {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 20px;
+        }
+
+        .card-text {
+            color: black;
+            font-size: 18px;
+        }
+
+        .info-text {
+            font-weight: bold;
+        }
+
+        .button-container {
+            display: flex;
+            margin: 20px;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        button {
+            opacity: 0.7;
+            background-color: #4a90e2;
+            color: #fff;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            display: inline-block;
+            cursor: pointer;
+            transition: 0.5s;
+            border: 2px solid black;
+            font-weight: bold;
+        }
+
+        .button-container button {
+            opacity: 0.7;
+            background-color: #4a90e2;
+            color: #fff;
+            padding: 8px 15px;
+            margin: 0 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.5s;
+            border: 2px solid black;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .button-container span {
+            padding: 4px;
+        }
+
+        button:hover {
+            opacity: 1;
+        }
+
+        .container-share-options {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .container-share-options button {
+            width: 50%;
+            margin: 5px;
+        }
+
+        .delete-button {
+            background-color: red;
+        }
+
+        .user-buttons {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 20px;
+        }
+
+        #edit-user-button {
+            color: #D9D9D9;
+            font-size: 30px;
+            padding: 0 5px;
+        }
+
+        #logout-button {
+            color: #D9D9D9;
+            font-size: 30px;
+            padding: 0 5px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        .user-buttons a {
+            font-size: 0;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Card {{ card.title }} shares</h1>
+    <div class="cards-container">
+        {% for shared_card in shared_cards %}
+            <div class="card-box">
+                <div class="container-card">
+                    <div class="card-text">Usuário: <span class="info-text">{{ shared_card.shared_with }}</span></div>
+                    <div class="card-text">Grupo: <span class="info-text">{{ shared_card.shared_group }}</span></div>
+                </div>
+                <div class="container-share-options">
+                    <button onclick="location.href='{% url 'cards:update_share' pk=shared_card.id %}'">Edit</button>
+                    <button onclick="location.href='{% url 'cards:remove_share' pk=shared_card.id %}'" class="delete-button">Delete</button>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="button-container">
+        <button onclick="location.href='{% url 'cards:list_all' %}'">
+            <span class="material-symbols-outlined" id="go-back-arrow">
+                arrow_circle_left
+            </span>
+            Go Back
+        </button>
+        <button onclick="location.href='{% url 'cards:share' pk=card.id %}'">
+            <span class="material-symbols-outlined" id="add-icon">
+                share
+            </span>
+            Share
+        </button>
+    </div>
+    <span class="material-symbols-outlined" id="go-back-arrow">
+    <div class="user-buttons">
+        <a href="{% url 'user:user_edit' %}">
+            <span class="material-symbols-outlined" id="edit-user-button">
+                account_circle
+            </span>
+        </a>
+        <a href="{% url 'user:logout' %}">
+            <span class="material-symbols-outlined" id="logout-button">
+                logout
+            </span>
+        </a>
+    </div>
+</body>
+</html>

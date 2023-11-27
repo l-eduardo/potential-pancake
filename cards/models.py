@@ -17,6 +17,9 @@ class Card(models.Model):
                                              shared_group__permissions__codename=permission_codename).exists()
         return False
 
+    def user_is_owner(self, user):
+        return self.owner == user
+
     def __str__(self):
         return self.title
 

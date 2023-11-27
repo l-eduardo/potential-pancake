@@ -115,6 +115,44 @@ def share(request):
         return render(request, 'share_card.html', {'form': form})
 
 
+@login_required
+def list_shared_card_users(request, pk):
+    card = Card.objects.get(pk=pk)
+    shared_cards = SharedCard.objects.filter(card=card)
+
+    return render(request, 'list_shared_card_users.html', {
+        'shared_cards': list(shared_cards),
+        'card': card
+    })
+
+
+@login_required
+def remove_share(request, pk):
+    shared_card = SharedCard.objects.get(pk=pk)
+
+    if shared_card.card.user_is_owner(request.user):
+        shared_card.delete()
+        return redirect('cards:list_shared_card_users', shared_card.card.id)
+
+    return HttpResponseForbidden("Você não tem permissão para remover o compartilhamento deste card.")
+
+
+@login_required
+def update_share(request, pk):
+    shared_card = SharedCard.objects.get(pk=pk)
+
+    if request.method == 'POST':
+        form = SharedCardForm(request.POST, instance=shared_card)
+        if shared_card and shared_card.card.user_is_owner(request.user) and form.is_valid():
+            form.save()
+            return redirect('cards:list_shared_card_users', shared_card.card.id)
+
+        return HttpResponseForbidden("Você não tem permissão para atualizar o compartilhamento deste card.")
+
+    form = SharedCardForm(instance=shared_card)
+    return render(request, 'update_shared_card.html', {'form': form, 'shared_card_id': shared_card.id})
+
+
 @login_required()
 def share_to_card(request, pk):
     if request.method == "GET":
