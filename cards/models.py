@@ -8,7 +8,7 @@ class Card(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def user_has_permission(self, user, permission_codename):
-        if user == self.owner:
+        if self.user_is_owner(user):
             return True
 
         shared_card = SharedCard.objects.filter(card=self, shared_with=user).first()

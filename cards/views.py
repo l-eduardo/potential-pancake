@@ -1,14 +1,25 @@
-from django.shortcuts import redirect, render, get_object_or_404
+from django.shortcuts import redirect, render
 from django.http import HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.contrib import messages
 
 from cards.forms import CardForm, SharedCardForm
 from cards.models import Card, SharedCard
 from tasks.models import Task
 
 
-@login_required()
+@login_required
 def list_all(request):
+    """
+    Lista todos os cards associados ao usuário logado, exibindo até 4 tarefas por card.
+
+    Args:
+        request (HttpRequest): O objeto de solicitação Django.
+
+    Returns:
+        HttpResponse: Renderiza a página 'cards.html' com os cards e tarefas associados.
+    """
     cards_tasks = {}
     cards = get_cards_for_user(request.user)
 
@@ -19,67 +30,163 @@ def list_all(request):
     return render(request, 'cards.html', {'cards_tasks': cards_tasks})
 
 
-@login_required()
+@login_required
 def create(request):
-    if request.method == "POST":
+    """
+    Cria um novo card associado ao usuário logado.
+
+    Args:
+        request (HttpRequest): O objeto de solicitação Django.
+
+    Returns:
+        HttpResponse: Redireciona para a página 'cards:list_all' após a criação bem-sucedida.
+        HttpResponseForbidden: Retorna uma resposta proibida se o usuário não tiver permissão.
+    """
+    if request.method == 'POST':
         form = CardForm(request.POST)
-        if form.is_valid():
+
+        if form.is_valid() and caller_is_owner(request):
             form.save()
             return redirect('cards:list_all')
-    elif request.method == "GET":
+
+        return HttpResponseForbidden('Você não tem permissão para criar cards para outros usuários.')
+    elif request.method == 'GET':
         form = CardForm()
         return render(request, 'create_card.html', {'form': form})
 
 
-@login_required()
+@login_required
 def delete(request, pk):
-    card = get_object_or_404(Card, pk=pk)
-    if card.user_has_permission(request.user, "delete_card"):
+    """
+    Exclui um card específico associado ao usuário logado.
+
+    Args:
+        request (HttpRequest): O objeto de solicitação Django.
+        pk (int): A chave primária (ID) do card a ser excluído.
+
+    Returns:
+        HttpResponse: Redireciona para a página 'cards:list_all' após a exclusão bem-sucedida.
+        HttpResponseForbidden: Retorna uma resposta proibida se o usuário não tiver permissão.
+    """
+    card = Card.objects.get(pk=pk)
+    if card.user_is_owner(request.user):
         card.delete()
         return redirect('cards:list_all')
 
-    return HttpResponseForbidden("Você não tem permissão para remover este card.")
+    return HttpResponseForbidden('Você não tem permissão para remover este card.')
 
 
-@login_required()
-def share(request):
-    if request.method == "POST":
-        card_id = request.POST.get('card')
-        card = get_object_or_404(Card, id=card_id, owner=request.user)
-
-        if card:
-            user_to_share = request.POST.get('shared_with')
-            shared_card = SharedCard.objects.filter(card=card, shared_with=user_to_share).first()
-
-            form = SharedCardForm(request.POST, instance=shared_card)
-            if form.is_valid():
-                form.save()
-            return redirect('cards:list_all')
-
-        return HttpResponseForbidden("Você não tem permissão para compartilhar este card.")
-    elif request.method == "GET":
-        form = SharedCardForm()
-        return render(request, 'share_card.html', {'form': form})
-
-
-@login_required()
+@login_required
 def update(request, pk):
-    card = get_object_or_404(Card, pk=pk)
+    """
+    Atualiza um card específico associado ao usuário logado.
+
+    Args:
+        request (HttpRequest): O objeto de solicitação Django.
+        pk (int): A chave primária (ID) do card a ser atualizado.
+
+    Returns:
+        HttpResponse: Redireciona para a página 'cards:list_all' após a atualização bem-sucedida.
+        HttpResponseForbidden: Retorna uma resposta proibida se o usuário não tiver permissão.
+    """
+    card = Card.objects.get(pk=pk)
 
     if request.method == 'POST':
         form = CardForm(request.POST, instance=card)
-        if form.is_valid() and card.user_has_permission(request.user, "change_card"):
+        if form.is_valid() and card.user_is_owner(request.user):
             form.save()
             return redirect('cards:list_all')
 
-        return HttpResponseForbidden("Você não tem permissão para atualizar este card.")
+        return HttpResponseForbidden('Você não tem permissão para atualizar este card.')
 
     form = CardForm(instance=card)
 
     return render(request, 'update_card.html', {'form': form})
 
 
+@login_required
+def find_by_id(request, pk):
+    """
+    Exibe informações detalhadas sobre um card específico associado ao usuário logado ou se o usuário
+    tiver permissão para acessá-lo.
+
+    Args:
+        request (HttpRequest): O objeto de solicitação Django.
+        pk (int): A chave primária (ID) do card a ser exibido.
+
+    Returns:
+        HttpResponse: Renderiza a página 'card.html' com informações detalhadas sobre o card e tarefas associadas.
+        HttpResponseForbidden: Retorna uma resposta proibida se o usuário não tiver permissão.
+    """
+    card = Card.objects.get(pk=pk)
+    tasks = Task.objects.filter(card=card)
+    if card.user_has_permission(request.user, 'view_card'):
+        return render(request, 'card.html', {
+            'card': card,
+            'tasks': tasks
+        })
+
+    return HttpResponseForbidden('Você não tem permissão para acessar este card.')
+
+
+@login_required
+def share(request):
+    """
+    Compartilha um card específico com outro usuário.
+
+    Args:
+        request (HttpRequest): O objeto de solicitação Django.
+
+    Returns:
+        HttpResponse: Redireciona para a página 'cards:list_all' após o compartilhamento bem-sucedido.
+        HttpResponseForbidden: Retorna uma resposta proibida se o usuário não tiver permissão.
+    """
+    if request.method == 'POST':
+        card_id = request.POST.get('card')
+        card = Card.objects.get(pk=card_id)
+        shared_with_id = request.POST.get('shared_with')
+        shared_with = User.objects.get(pk=shared_with_id)
+        shared_card = SharedCard.objects.filter(card=card, shared_with=shared_with).first()
+        form = SharedCardForm(request.POST, instance=shared_card)
+
+        if form.is_valid() and card.user_is_owner(request.user):
+            form.save()
+            return redirect('cards:list_all')
+
+        messages.success(request, 'Sua senha foi alterada com sucesso!')
+
+        return HttpResponseForbidden('Você não tem permissão para compartilhar este card.')
+    elif request.method == 'GET':
+        form = SharedCardForm()
+        return render(request, 'share_card.html', {'form': form})
+   
+
+def caller_is_owner(request):
+    """
+    Verifica se o usuário que fez a chamada é o proprietário do card. Usado quando o card
+    ainda não existe na base de dados.
+
+    Args:
+        request (HttpRequest): O objeto de solicitação Django.
+
+    Returns:
+        bool: True se o usuário que fez a chamada for o proprietário, False caso contrário.
+    """
+    owner_id = request.POST.get('owner')
+    owner = User.objects.get(id=owner_id)
+    return request.user == owner
+
+
 def get_cards_for_user(user):
+    """
+    Obtém todos os cards associados a um determinado usuário.
+
+    Args:
+        user (User): O objeto de usuário Django.
+
+    Returns:
+        list: Uma lista de objetos Card associados ao usuário, incluindo os cards de propriedade e compartilhados.
+    """
     owned_cards = Card.objects.filter(owner=user)
 
     shared_card_ids = SharedCard.objects.filter(shared_with=user).values_list('card', flat=True)
@@ -88,33 +195,8 @@ def get_cards_for_user(user):
     cards = list(owned_cards) + list(shared_cards)
 
     return cards
-
-
-@login_required()
-def find_by_id(request, pk):
-    card = get_object_or_404(Card, pk=pk)
-    tasks = Task.objects.filter(card=card)
-    if card.user_has_permission(request.user, "view_card"):
-        return render(request, 'card.html', {
-            'card': card,
-            'tasks': tasks
-        })
-
-    return HttpResponseForbidden("Você não tem permissão para acessar este card.")
-
-
-@login_required()
-def share(request):
-    if request.method == "POST":
-        form = SharedCardForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('cards:list_all')
-    elif request.method == "GET":
-        form = SharedCardForm()
-        return render(request, 'share_card.html', {'form': form})
-
-
+  
+  
 @login_required
 def list_shared_card_users(request, pk):
     card = Card.objects.get(pk=pk)
