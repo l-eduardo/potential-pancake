@@ -8,7 +8,7 @@ from cards.models import Card
 from cards.views import get_cards_for_user
 
 
-@login_required
+@login_required()
 def list_all(request):
     cards = get_cards_for_user(request.user)
     tasks = Task.objects.filter(card__in=cards)
@@ -16,11 +16,12 @@ def list_all(request):
 
 
 @login_required
-def create(request, card):
+def create(request):
     if request.method == "POST":
         form = TaskForm(request.POST)
         card_id = request.POST.get('card')
-        card = card
+        card = Card.objects.get(id=card_id)
+        print(card)
         if form.is_valid() and card.user_has_permission(request.user, "create_task"):
             form.save()
             return redirect('cards:list_all')
@@ -29,7 +30,7 @@ def create(request, card):
         return render(request, 'create_task.html', {'form': form})
 
 
-@login_required
+@login_required()
 def delete(request, pk):
     task = get_object_or_404(Task, pk=pk)
 
@@ -40,7 +41,7 @@ def delete(request, pk):
     return HttpResponseForbidden("Você não tem permissão para remover esta tarefa.")
 
 
-@login_required
+@login_required()
 def update(request, pk):
     task = get_object_or_404(Task, pk=pk)
 
@@ -57,7 +58,7 @@ def update(request, pk):
     return render(request, 'update_task.html', {'form': form})
 
 
-@login_required
+@login_required()
 def find_by_id(request, pk):
     task = get_object_or_404(Task, pk=pk)
 
@@ -67,7 +68,7 @@ def find_by_id(request, pk):
     return HttpResponseForbidden("Você não tem permissão para acessar esta tarefa.")
 
 
-@login_required
+@login_required()
 def complete(request, pk):
     task = get_object_or_404(Task, pk=pk)
 
@@ -77,3 +78,11 @@ def complete(request, pk):
         return redirect('cards:list_all')
 
     return HttpResponseForbidden("Você não tem permissão para completar esta tarefa.")
+
+@login_required
+def create_task_to_card(request, pk):
+    if request.method == "GET":
+        form = TaskForm()
+        print(form.fields.keys())
+        form.fields["card"].initial = pk
+        return render(request, 'create_task.html', {'form': form})

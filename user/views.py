@@ -1,14 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, update_session_auth_hash
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
 
-from user.forms import CreateUserForm, EmailOnlyPasswordResetForm
+from user.forms import CreateUserForm, EditPasswordForm, EditUserForm, EmailOnlyPasswordResetForm
 
 
 def register(request):
@@ -52,18 +52,33 @@ def logout(request):
 @login_required()
 def user_edit(request):
     if request.method == 'POST':
-        form = CreateUserForm(request.POST, instance = request.user)
+        form = EditUserForm(request.POST, instance = request.user)
         if form.is_valid():
             form.save()
             messages.success(request, 'User information updated successfully!')
-            return redirect('tasks')
+            return redirect('cards:list_all')
         
     else:
-        form = CreateUserForm(instance=request.user)
+        form = EditUserForm(instance=request.user)
     
     context = {'form':form}
     return render(request, 'user_edit.html', context)
-  
+
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = EditPasswordForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Sua senha foi alterada com sucesso!')
+            return redirect('cards:list_all')
+    else:
+        form = EditPasswordForm(request.user)
+
+    return render(request, 'change_password.html', {'form': form}) 
+
+
 def reset_password(request):
     if request.method == "POST":
         form = EmailOnlyPasswordResetForm(request.POST)

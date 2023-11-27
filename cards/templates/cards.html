@@ -170,7 +170,7 @@
                             <a href="{% url 'cards:delete' pk=card.id%}" class="material-symbols-outlined">
                                 delete
                             </a>
-                            <a href="{% url 'tasks:create' %}" class="material-symbols-outlined">
+                            <a href="{% url 'tasks:create_task_to_card' pk=card.id %}" class="material-symbols-outlined">
                                 add
                             </a>
                         </div>

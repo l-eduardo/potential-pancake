@@ -82,6 +82,10 @@ WSGI_APPLICATION = 'potentialpancake.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://potential-pancake-production.up.railway.app",
+]
+
 DATABASES = {
     'default': {
         "ENGINE": os.environ.get("SQL_ENGINE"),
@@ -130,7 +134,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-LOGIN_URL = '/login/'
+LOGIN_URL = 'user:login'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

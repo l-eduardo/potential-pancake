@@ -80,8 +80,10 @@
         <label for="description">Description:</label>
         {{ form.description }}
 
-        <label class="card_button" for="card">Card:</label>
-        {{ form.card }}
+        <div style="display: ;">
+            <label class="card_button" for="card">Card:</label>
+            {{ form.card }}
+        </div>
         <div class='button-container'>
             <button type="submit">Save</button>
             <a href="{% url 'cards:list_all' %}">Go back</a>
