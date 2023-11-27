@@ -35,7 +35,7 @@
 
         label {
             display: block;
-            margin-bottom: 8px;
+            margin: 8px 0;
             font-weight: bold;
         }
 
@@ -85,10 +85,14 @@
         'GRAD' 0,
         'opsz' 24
         }
+
+        .display-none {
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <form method="POST">
+    <form method="POST" action="{% url 'cards:share' %}">
         <div class="go-back">
             <a href="javascript:history.go(-1);">
                 <span class="material-symbols-outlined">
@@ -98,7 +102,18 @@
         </div>
         <h1>Share Card</h1>
         {% csrf_token %}
-        {{ form.as_p }}
+
+        <div class="display-none">
+            <label class="card_button" for="card">Card:</label>
+            {{ form.card }}
+        </div>
+
+        <label for="shared_with">Shared With:</label>
+        {{ form.shared_with }}
+
+        <label for="shared_group">Shared Group:</label>
+        {{ form.shared_group }}
+
         <div class="button-container">
             <button type="submit">Save</button>
         </div>
