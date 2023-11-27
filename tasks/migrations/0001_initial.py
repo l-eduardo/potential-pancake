@@ -17,7 +17,6 @@ class Migration(migrations.Migration):
             name='Task',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=100)),
                 ('description', models.CharField(max_length=255)),
                 ('completed', models.BooleanField(default=False)),
                 ('card', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='cards.card')),
