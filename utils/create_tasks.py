@@ -14,10 +14,10 @@ django.setup()
 
 if __name__ == '__main__':
     import faker
-    from tasks.models import TodoList, Task
+    from tasks.models import Card, Task
     from django.contrib.auth.models import User
 
-    TodoList.objects.all().delete()
+    Card.objects.all().delete()
     Task.objects.all().delete()
 
     fake = faker.Faker('pt_BR')
@@ -26,14 +26,14 @@ if __name__ == '__main__':
                                     email='user@email.com',
                                     password='password')
 
-    todo_lists = ['Trabalho', 'Faculdade', 'Casa']
-    todo_lists_description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris non condimentum lectus. '\
+    cards = ['Trabalho', 'Faculdade', 'Casa']
+    cards_description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris non condimentum lectus. '\
                              'Vivamus id commodo turpis. Duis commodo a urna non posuere.'
 
-    django_todo_lists = [TodoList(title=title, description=todo_lists_description, owner=owner) for title in todo_lists]
+    django_cards = [Card(title=title, description=cards_description, owner=owner) for title in cards]
 
-    for todo_list in django_todo_lists:
-        todo_list.save()
+    for card in django_cards:
+        card.save()
 
     django_tasks = []
 
@@ -41,9 +41,9 @@ if __name__ == '__main__':
         profile = fake.profile()
         title = fake.text(max_nb_chars=100)
         description = fake.text(max_nb_chars=255)
-        todo_list = choice(django_todo_lists)
+        card = choice(django_cards)
 
-        django_tasks.append(Task(title=title, description=description, todo_list=todo_list))
+        django_tasks.append(Task(title=title, description=description, card=card))
 
     if len(django_tasks) > 0:
         Task.objects.bulk_create(django_tasks)

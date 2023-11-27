@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <title>Task {{ task.title }}</title>
+</head>
+<body>
+    <h1>Task {{ task.title }}</h1>
+    <ul>
+        <li>{{ task.description }}</li>
+        <li>{{ task.completed }}</li>
+        <li>{{ task.id }}</li>
+        <li><a href="{% url 'tasks:update' pk=task.id%}">Atualizar</a> <a href="{% url 'tasks:delete' pk=task.id%}">Excluir</a></li>
+    </ul>
+    <a href="{% url 'tasks:list_all' %}">Voltar para a lista de tasks</a>
+</body>
+</html>
