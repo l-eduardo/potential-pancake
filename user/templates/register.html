@@ -52,11 +52,13 @@
 				   		</div>
 					</form>
 				</div>
-				
+
+				{% for message in messages%}
+					<p id='messages'>{{message}}</P>
+				{% endfor %}
 				<div id="form-errors">
 					{{form.errors}}
 				</div>
-                
                 
 				<div class="mt-4">
 					<div class="d-flex justify-content-center links">

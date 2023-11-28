@@ -20,14 +20,16 @@ def list_all(request):
     Returns:
         HttpResponse: Renderiza a página 'cards.html' com os cards e tarefas associados.
     """
-    cards_tasks = {}
+    cards_tasks_permissions = {}
+
     cards = get_cards_for_user(request.user)
 
     for card in cards:
         tasks = Task.objects.filter(card=card)[:4]
-        cards_tasks[card] = tasks
+        cards_tasks_permissions[card] = [tasks, card.user_has_edit_permissions(request.user)]
+    print(cards_tasks_permissions)
 
-    return render(request, 'cards.html', {'cards_tasks': cards_tasks})
+    return render(request, 'cards.html', {'cards_tasks_permissions': cards_tasks_permissions})
 
 
 @login_required
@@ -196,8 +198,7 @@ def get_cards_for_user(user):
     cards = list(owned_cards) + list(shared_cards)
 
     return cards
-  
-  
+
 @login_required
 def list_shared_card_users(request, pk):
     card = Card.objects.get(pk=pk)

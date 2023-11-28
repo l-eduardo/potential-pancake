@@ -10,7 +10,12 @@
 <body>
     <h1>Cards</h1>
     <ul>
-        {% for card, tasks in cards_tasks.items %}
+
+        {% for message in messages%}
+            <p style="display: none;">{{message}}</p>
+        {% endfor %}
+
+        {% for card, tasks_permissions in cards_tasks_permissions.items %}
             <li>
                 <a href="{% url 'cards:find_by_id' pk=card.id%}">
                     <div class="container-card-title">
@@ -26,7 +31,8 @@
                     </div>
                 </a>
                 <ol>
-                    {% for task in tasks %}
+                    {% for task in tasks_permissions.0 %}
+                        {% if tasks_permissions.1 %}
                         <a href="{% url 'tasks:complete' pk=task.id%}" class="complete-anchor">
                             <li {% if task.completed %}class="completed"{% endif %}>
                                 <div class='container-task'>
@@ -38,8 +44,22 @@
                                 </div>
                             </li>
                         </a>
+                        {% else %}
+                        <a href="_blank" style="pointer-events: none;" class="complete-anchor">
+                            <li {% if task.completed %}class="completed"{% endif %}>
+                                <div class='container-task'>
+                                        <input type='checkbox' {% if task.completed %}checked{% endif %} disabled>
+                                        {{ task.description }}
+                                    <a href="_blank" style="pointer-events: none;" class="material-symbols-outlined" id="delete-task-button">
+                                        close
+                                    </a>
+                                </div>
+                            </li>
+                        </a>
+                        {% endif %}
                     {% endfor %}
                     <div class="action-links">
+                        {% if tasks_permissions.1 %}
                         <div class='botoes'>
                             <a href="{% url 'cards:update' pk=card.id%}" class="material-symbols-outlined">
                                 edit
@@ -54,6 +74,11 @@
                                 share
                             </a>
                         </div>
+                        {% else %}
+                        <div style="color: #555;">
+                            <p style="margin: 0!important; text-align: center;">Somente visualizacao</p>
+                        </div>
+                        {% endif %}
                     </div>
                 </ol>
             </li>
