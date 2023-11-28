@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
- 
+    <meta name="viewport" content="width=device-width, initial-scale=0.8">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <title>Card {{ card.title }}</title>
     <style>
         body {
@@ -54,6 +55,12 @@
 
         .task-text {
             flex-grow: 1;
+            width: 45vw;   
+            overflow: hidden;   
+            display: inline-block;   
+            text-overflow: ellipsis;   
+            white-space: nowrap;
+            vertical-align: middle;
         }
 
         .material-symbols-outlined {
@@ -127,6 +134,12 @@
             color: #D9D9D9;
             padding: 0 5px;
         }
+
+        @media only screen and (max-width: 700px) {
+            .label-button {
+              display: none;
+            }
+        }
     </style>
 </head>
 <body>
@@ -139,7 +152,7 @@
                         <div class='task-box'>
                             <div class='container-task'>
                                 <input type='checkbox' {% if task.completed %}checked{% endif %} disabled>
-                                <span class="task-text">{{ task.description }}</span>
+                                <label class="task-text">{{ task.description }}</label>
                                 <a href="{% url 'tasks:delete' pk=task.id%}" class="material-symbols-outlined">
                                     close
                                 </a>
@@ -155,19 +168,19 @@
             <span class="material-symbols-outlined" id="go-back-arrow">
                 arrow_circle_left
             </span>
-            Go Back
+            <span class='label-button'>Go back</span>
         </button>
         <button onclick="location.href='{% url 'tasks:create_task_to_card' pk=card.id %}'">
             <span class="material-symbols-outlined" id="add-icon">
                 add
             </span>
-            New Task
+            <span class='label-button'>New Task</span>
         </button>
-        <button onclick="location.href='{% url 'cards:list_shared_card_users' pk=card.id %}'">
+        <button onclick="location.href='{% url 'cards:share' pk=card.id %}'">
             <span class="material-symbols-outlined" id="add-icon">
                 share
             </span>
-            Share
+            <span class='label-button'>Share</span>
         </button>
     </div>
     <div class="user-buttons">

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <title>Card List</title>
     <style>
@@ -179,6 +180,14 @@
             font-size: 30px;
             padding: 0 5px;
         }
+        .task-description{
+            width: 15vw;   
+            overflow: hidden;   
+            display: inline-block;   
+            text-overflow: ellipsis;   
+            white-space: nowrap;
+            vertical-align: middle;
+        }
 
     </style>
 </head>
@@ -206,7 +215,7 @@
                             <li {% if task.completed %}class="completed"{% endif %}>
                                 <div class='container-task'>
                                         <input type='checkbox' {% if task.completed %}checked{% endif %} disabled>
-                                        {{ task.description }}
+                                        <label class='task-description'> {{ task.description }} </label>
                                     <a href="{% url 'tasks:delete' pk=task.id%}" class="material-symbols-outlined" id="delete-task-button">
                                         close
                                     </a>
