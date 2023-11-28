@@ -28,7 +28,6 @@ def register(request):
             email = form.cleaned_data.get('email')
             if User.objects.filter(email=email).exists():
                 messages.error(request, 'Email already exists')
-                print("Email existente")
                 context = {'form': form}
                 return render(request, 'register.html', context)
             
