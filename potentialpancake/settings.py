@@ -134,6 +134,12 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATICFILES_DIRS = [
+    BASE_DIR / "cards/static/",
+    BASE_DIR / "tasks/static/",
+    BASE_DIR / "user/static/",
+]
+
 LOGIN_URL = 'user:login'
 
 # Default primary key field type
