@@ -48,14 +48,20 @@ html {
     outline: 0px !important;
 }
 
-#messages {
+#messages,
+#form-errors ul {
     font-size: x-small;
     background-color: grey;
     color: #fff;
-    padding: 10px;
+    padding: 0 0;
     margin: auto;
-    margin-top: 10px;
+    margin-top: 5px;
     border-radius: 10px;
     text-align: center;
     width: 200px;
+    list-style-type: none;
+}
+
+#form-errors li {
+    margin-bottom: 10px;
 }
