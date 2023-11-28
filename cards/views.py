@@ -26,7 +26,7 @@ def list_all(request):
 
     for card in cards:
         tasks = Task.objects.filter(card=card)[:4]
-        cards_tasks_permissions[card] = [tasks, card.user_has_edit_permissions(request.user)]
+        cards_tasks_permissions[card] = [tasks, card.user_has_edit_permissions(request.user), card.user_is_owner(request.user)]
     print(cards_tasks_permissions)
 
     return render(request, 'cards.html', {'cards_tasks_permissions': cards_tasks_permissions})
@@ -121,12 +121,15 @@ def find_by_id(request, pk):
         HttpResponse: Renderiza a página 'card.html' com informações detalhadas sobre o card e tarefas associadas.
         HttpResponseForbidden: Retorna uma resposta proibida se o usuário não tiver permissão.
     """
+
     card = Card.objects.get(pk=pk)
     tasks = Task.objects.filter(card=card)
     if card.user_has_permission(request.user, 'view_card'):
         return render(request, 'card.html', {
             'card': card,
-            'tasks': tasks
+            'tasks': tasks,
+            'has_edit_permission': card.user_has_edit_permissions(request.user),
+            'is_owner': card.user_is_owner(request.user),
         })
 
     return HttpResponseForbidden('Você não tem permissão para acessar este card.')

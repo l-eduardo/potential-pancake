@@ -134,11 +134,12 @@
     <div class="tasks-container">
         <ol>
             {% for task in tasks %}
+            {% if has_edit_permission is True %}
                 <a href="{% url 'tasks:complete' pk=task.id%}">
                     <li {% if task.completed %}class="completed"{% endif %}>
                         <div class='task-box'>
                             <div class='container-task'>
-                                <input type='checkbox' {% if task.completed %}checked{% endif %} disabled>
+                                <input type='checkbox' {% if task.completed %}checked {% endif %} disabled>
                                 <span class="task-text">{{ task.description }}</span>
                                 <a href="{% url 'tasks:delete' pk=task.id%}" class="material-symbols-outlined">
                                     close
@@ -147,6 +148,21 @@
                         </div>
                     </li>
                 </a>
+                {% else %}
+                <a href="_blank" style="pointer-events: none;">
+                    <li {% if task.completed %}class="completed"{% endif %}>
+                        <div class='task-box'>
+                            <div class='container-task'>
+                                <input type='checkbox' class="no-disable-style" {% if task.completed %}checked {% endif %} disabled>
+                                <span class="task-text">{{ task.description }}</span>
+                                <a href="_blank" style="pointer-events: none;" class="material-symbols-outlined">
+                                    close
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                </a>
+                {% endif %}
             {% endfor %}
         </ol>
     </div>
@@ -157,18 +173,22 @@
             </span>
             Go Back
         </button>
-        <button onclick="location.href='{% url 'tasks:create_task_to_card' pk=card.id %}'">
-            <span class="material-symbols-outlined" id="add-icon">
-                add
-            </span>
-            New Task
-        </button>
-        <button onclick="location.href='{% url 'cards:list_shared_card_users' pk=card.id %}'">
-            <span class="material-symbols-outlined" id="add-icon">
-                share
-            </span>
-            Share
-        </button>
+        {% if has_edit_permission is True %}
+            <button onclick="location.href='{% url 'tasks:create_task_to_card' pk=card.id %}'">
+                <span class="material-symbols-outlined" id="add-icon">
+                    add
+                </span>
+                New Task
+            </button>
+        {% endif %}
+        {% if is_owner is True %}
+            <button onclick="location.href='{% url 'cards:list_shared_card_users' pk=card.id %}'">
+                <span class="material-symbols-outlined" id="add-icon">
+                    share
+                </span>
+                Share
+            </button>
+        {% endif %}
     </div>
     <div class="user-buttons">
         <a href="{% url 'user:user_edit' %}">
