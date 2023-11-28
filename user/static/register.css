@@ -1,0 +1,61 @@
+body,
+html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: var(--primary-color, #373737) !important;
+}
+
+.user_card {
+    width: 100%;
+    max-width: 400px;
+    margin: auto;
+    background: var(--second-color, #D9D9D9);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 10px;
+}
+
+#form-title {
+    color: #3d3939;
+    font-size: x-large;
+    text-align: center;
+}
+
+.login_btn {
+    background: #3a3938 !important;
+    color: white !important;
+}
+
+.login_btn:focus {
+    box-shadow: none !important;
+    outline: 0px !important;
+}
+
+.input-group-text {
+    background: #3a3938 !important;
+    color: white !important;
+    border: 0 !important;
+    border-radius: 0.25rem 0 0 0.25rem !important;
+}
+
+.input_user,
+.input_pass:focus {
+    box-shadow: none !important;
+    outline: 0px !important;
+}
+
+#messages {
+    font-size: x-small;
+    background-color: grey;
+    color: #fff;
+    padding: 10px;
+    margin: auto;
+    margin-top: 10px;
+    border-radius: 10px;
+    text-align: center;
+    width: 200px;
+}

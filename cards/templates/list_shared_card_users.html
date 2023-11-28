@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'list_shared_card_users.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=0.8">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-
     <title>Card {{ card.title }} shares</title>
     <style>
         body {
@@ -17,7 +19,7 @@
         }
 
         h1 {
-            margin-top: 20px;
+            margin-top: 60px;
         }
 
         .cards-container {
