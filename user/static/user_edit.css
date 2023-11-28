@@ -73,3 +73,18 @@ html {
 #go-back-arrow {
     color: #373737;
 }
+
+#form-errors{
+    margin-top: 10px; /* Espaçamento acima das mensagens */
+    padding: 5px; /* Espaçamento interno */
+    background-color: grey; 
+    color: #fff; /* Cor do texto */
+    border-radius: 5px; /* Borda arredondada */
+    font-size: x-small;
+    font-weight: bold;
+}
+
+#form-errors ul{
+    list-style-type: none;
+    margin-bottom: 5px;
+}
