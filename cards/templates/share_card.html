@@ -1,15 +1,43 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-BR">
 <head>
-    <title>Compartilhar Card</title>
+    {% load static %}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <meta name="viewport" content="width=device-width, initial-scale=0.8">
+    <link rel="stylesheet" href="{% static 'share_card.css' %}">
+    <title>Share Card</title>
 </head>
 <body>
-    <h1>Compartilhar Card</h1>
 
-    <form method="POST">
+    {% for message in messages%}
+        <p style="display: none;">{{message}}</p>
+    {% endfor %}
+
+    <form method="POST" action="{% url 'cards:share' %}">
+        <div class="go-back">
+            <a href="{% url 'cards:list_all' %}">
+                <span class="material-symbols-outlined">
+                arrow_circle_left
+                </span>
+            </a>
+        </div>
+        <h1>Share Card</h1>
         {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Salvar">
+
+        <div class="display-none">
+            <label class="card_button" for="card">Card:</label>
+            {{ form.card }}
+        </div>
+
+        <label for="shared_with">Share With:</label>
+        {{ form.shared_with }}
+
+        <label for="shared_group">Permission:</label>
+        {{ form.shared_group }}
+
+        <div class="button-container">
+            <button type="submit">Save</button>
+        </div>
     </form>
 </body>
 </html>

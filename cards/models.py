@@ -4,11 +4,10 @@ from django.contrib.auth.models import User, Group
 
 class Card(models.Model):
     title = models.CharField(max_length=100)
-    description = models.CharField(max_length=255)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def user_has_permission(self, user, permission_codename):
-        if user == self.owner:
+        if self.user_is_owner(user):
             return True
 
         shared_card = SharedCard.objects.filter(card=self, shared_with=user).first()
@@ -17,6 +16,12 @@ class Card(models.Model):
                                              shared_group__permissions__codename=permission_codename).exists()
         return False
 
+    def user_is_owner(self, user):
+        return self.owner == user
+    
+    def user_has_edit_permissions(self, user):
+        return SharedCard.objects.filter(shared_group__name='write', shared_with=user, card=self).exists() or self.user_is_owner(user)
+    
     def __str__(self):
         return self.title
 

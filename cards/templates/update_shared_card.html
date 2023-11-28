@@ -2,14 +2,13 @@
 <html lang="pt-BR">
 <head>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'create_task.css' %}">
+    <title>Share Card</title>
+    <link rel="stylesheet" href="{% static 'update_shared_card.css' %}">
     <meta name="viewport" content="width=device-width, initial-scale=0.8">
-    <title>Create Task</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 <body>
-    <form method="post" action="{% url 'tasks:create' %}">
-        {% csrf_token %}
+    <form method="POST" action="{% url 'cards:update_share' pk=shared_card_id %}">
         <div class="go-back">
             <a href="{% url 'cards:list_all' %}">
                 <span class="material-symbols-outlined">
@@ -17,17 +16,23 @@
                 </span>
             </a>
         </div>
-
-        <h1>Create Task</h1>
-
-        <label for="description">Description:</label>
-        {{ form.description }}
+        <h1>Share Card</h1>
+        {% csrf_token %}
 
         <div class="display-none">
             <label class="card_button" for="card">Card:</label>
             {{ form.card }}
         </div>
-        <div class='button-container'>
+
+        <div class="display-none">
+            <label for="shared_with">Shared With:</label>
+            {{ form.shared_with }}
+        </div>
+
+        <label for="shared_group">Shared Group:</label>
+        {{ form.shared_group }}
+
+        <div class="button-container">
             <button type="submit">Save</button>
         </div>
     </form>

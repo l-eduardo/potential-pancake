@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'list_shared_card_users.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=0.8">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <title>Card {{ card.title }} shares</title>
+</head>
+<body>
+    <h1>Card {{ card.title }} shares</h1>
+    <div class="cards-container">
+        {% for shared_card in shared_cards %}
+            <div class="card-box">
+                <div class="container-card">
+                    <div class="card-text">Usuário: <span class="info-text">{{ shared_card.shared_with }}</span></div>
+                    <div class="card-text">Grupo: <span class="info-text">{{ shared_card.shared_group }}</span></div>
+                </div>
+                <div class="container-share-options">
+                    <button onclick="location.href='{% url 'cards:update_share' pk=shared_card.id %}'">Edit</button>
+                    <button onclick="location.href='{% url 'cards:remove_share' pk=shared_card.id %}'" class="delete-button">Delete</button>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="button-container">
+        <button onclick="location.href='{% url 'cards:list_all' %}'">
+            <span class="material-symbols-outlined" id="go-back-arrow">
+                arrow_circle_left
+            </span>
+            Go Back
+        </button>
+        <button onclick="location.href='{% url 'cards:share' pk=card.id %}'">
+            <span class="material-symbols-outlined" id="add-icon">
+                share
+            </span>
+            Share
+        </button>
+    </div>
+    <span class="material-symbols-outlined" id="go-back-arrow">
+    <div class="user-buttons">
+        <a href="{% url 'user:user_edit' %}">
+            <span class="material-symbols-outlined" id="edit-user-button">
+                account_circle
+            </span>
+        </a>
+        <a href="{% url 'user:logout' %}">
+            <span class="material-symbols-outlined" id="logout-button">
+                logout
+            </span>
+        </a>
+    </div>
+</body>
+</html>
