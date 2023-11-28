@@ -27,7 +27,6 @@ def list_all(request):
     for card in cards:
         tasks = Task.objects.filter(card=card)[:4]
         cards_tasks_permissions[card] = [tasks, card.user_has_edit_permissions(request.user), card.user_is_owner(request.user)]
-    print(cards_tasks_permissions)
 
     return render(request, 'cards.html', {'cards_tasks_permissions': cards_tasks_permissions})
 
@@ -51,7 +50,7 @@ def create(request):
             form.save()
             return redirect('cards:list_all')
 
-        return HttpResponseForbidden('Você não tem permissão para criar cards para outros usuários.')
+        return HttpResponseForbidden('YOU SHALL NOT PASS!')
     elif request.method == 'GET':
         form = CardForm()
         form.fields["owner"].initial = request.user.id
@@ -76,7 +75,7 @@ def delete(request, pk):
         card.delete()
         return redirect('cards:list_all')
 
-    return HttpResponseForbidden('Você não tem permissão para remover este card.')
+    return HttpResponseForbidden('YOU SHALL NOT PASS!')
 
 
 @login_required
@@ -100,7 +99,7 @@ def update(request, pk):
             form.save()
             return redirect('cards:list_all')
 
-        return HttpResponseForbidden('Você não tem permissão para atualizar este card.')
+        return HttpResponseForbidden('YOU SHALL NOT PASS!')
 
     form = CardForm(instance=card)
 
@@ -132,7 +131,7 @@ def find_by_id(request, pk):
             'is_owner': card.user_is_owner(request.user),
         })
 
-    return HttpResponseForbidden('Você não tem permissão para acessar este card.')
+    return HttpResponseForbidden('YOU SHALL NOT PASS!')
 
 
 @login_required
@@ -155,13 +154,16 @@ def share(request):
         shared_card = SharedCard.objects.filter(card=card, shared_with=shared_with).first()
         form = SharedCardForm(request.POST, instance=shared_card)
 
-        if form.is_valid() and card.user_is_owner(request.user):
-            form.save()
+        if request.user == shared_with:
             return redirect('cards:list_all')
 
-        messages.success(request, 'Sua senha foi alterada com sucesso!')
+        if form.is_valid() and card.user_is_owner(request.user):
+            form.save()
+            messages.success(request, 'Successful sharing!')
+            return redirect('cards:list_all')
 
-        return HttpResponseForbidden('Você não tem permissão para compartilhar este card.')
+
+        return HttpResponseForbidden('YOU SHALL NOT PASS!')
     elif request.method == 'GET':
         form = SharedCardForm()
         return render(request, 'share_card.html', {'form': form})
