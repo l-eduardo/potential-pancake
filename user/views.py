@@ -25,12 +25,19 @@ def register(request):
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
         if form.is_valid():
+            email = form.cleaned_data.get('email')
+            if User.objects.filter(email=email).exists():
+                messages.error(request, 'Email already exists')
+                print("Email existente")
+                context = {'form': form}
+                return render(request, 'register.html', context)
+            
             form.save()
             user = form.cleaned_data.get('username')
-            messages.success(request, 'Account created successfully! ' + user)
+            messages.success(request, 'Account created successfully! - ' + user)
 
             return redirect('user:login')
-
+        
     context = {'form': form}
     return render(request, 'register.html', context)
 
@@ -56,7 +63,7 @@ def user_login(request):
             return redirect('cards:list_all')
 
         else:
-            messages.info(request, 'Username OR password is incorrect')
+            messages.info(request, 'Username or password is incorrect')
 
     context = {}
     return render(request, 'login.html', context)
@@ -118,7 +125,7 @@ def change_password(request):
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)
-            messages.success(request, 'Sua senha foi alterada com sucesso!')
+            messages.success(request, 'Password updated successfully!')
             return redirect('cards:list_all')
     else:
         form = EditPasswordForm(request.user)

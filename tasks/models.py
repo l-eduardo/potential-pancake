@@ -9,4 +9,4 @@ class Task(models.Model):
     card = models.ForeignKey(Card, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.title
+        return self.description

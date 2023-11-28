@@ -18,7 +18,10 @@ class Card(models.Model):
 
     def user_is_owner(self, user):
         return self.owner == user
-
+    
+    def user_has_edit_permissions(self, user):
+        return SharedCard.objects.filter(shared_group__name='write', shared_with=user, card=self).exists() or self.user_is_owner(user)
+    
     def __str__(self):
         return self.title
 

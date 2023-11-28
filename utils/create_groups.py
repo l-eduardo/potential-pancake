@@ -13,8 +13,8 @@ if __name__ == '__main__':
     from django.contrib.auth.models import Group, Permission
 
     group_permissions = {
-        'admin': ['view_card', 'add_task', 'change_task', 'delete_task', 'view_task'],
-        'user': ['view_card', 'view_task'],
+        'write': ['view_card', 'add_task', 'change_task', 'delete_task', 'view_task'],
+        'read_only': ['view_card', 'view_task'],
     }
 
     for group_name, permissions in group_permissions.items():
